@@ -21,19 +21,48 @@ import { PlusIcon, MixIcon, StitchesLogoIcon } from '@radix-ui/react-icons';
 import { ThemeToggle } from '@components/ThemeToggle';
 import { BoxLink } from '@components/BoxLink';
 import { RadixLogoIcon } from './RadixLogoIcon';
-import { RemoveScroll } from 'react-remove-scroll';
 
 export const Header = () => {
   const router = useRouter();
   const isColors = router.pathname.includes('/colors') || router.pathname.includes('/docs/colors');
 
   return (
-    <Box as="header" className={RemoveScroll.classNames.fullWidth}>
+    <Box
+      as="header"
+      css={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 100,
+        backgroundColor: '$gray1',
+      }}
+    >
       <Container size="4">
         <Flex align="center" justify="between" css={{ height: '$8' }}>
           <NextLink href={isColors ? '/colors' : '/'} passHref>
             <BoxLink>
-              <RadixLogo label={isColors ? 'Radix Colors homepage' : 'Radix homepage'} />
+              <Text
+                as="span"
+                size={{ '@initial': 8, '@bp1': 9 }}
+                css={{
+                  color: 'transparent',
+                  display: 'inline-block',
+                  WebkitBackgroundClip: 'text',
+                  fontFamily: 'Krona One, sans-serif',
+                  backgroundImage: 'linear-gradient(180deg, $orange10, $red10)',
+                  // Use padding rather than margin, or otherwise some descenders
+                  // may be clipped with WebkitBackgroundClip: 'text'
+                  fontWeight: 500,
+                  lineHeight: '1.6',
+                  fontSize: 'min(max($7, 10vw), $7)',
+                  letterSpacing: 'max(min(-0.055em, 0.66vw), -0.07em)',
+                  '@media (min-width: 900px) and (min-height: 850px)': {
+                    fontSize: '30px',
+                    lineHeight: '1.16',
+                  },
+                }}
+              >
+                Bounti
+              </Text>
             </BoxLink>
           </NextLink>
 
@@ -57,7 +86,7 @@ export const Header = () => {
                     <Link
                       variant={router.pathname.includes('/docs/primitives') ? 'contrast' : 'subtle'}
                     >
-                      <Text>Documentation</Text>
+                      <Text>Games</Text>
                     </Link>
                   </NextLink>
 
@@ -65,7 +94,7 @@ export const Header = () => {
                     <Link
                       variant={router.pathname.includes('/case-studies') ? 'contrast' : 'subtle'}
                     >
-                      <Text>Case studies</Text>
+                      <Text>Bounties</Text>
                     </Link>
                   </NextLink>
                 </>

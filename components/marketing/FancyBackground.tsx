@@ -25,15 +25,6 @@ export const FancyBackground: React.FC = ({ children }) => {
             position: 'absolute',
             top: 0,
             bottom: 0,
-            backgroundRepeat: 'no-repeat',
-            backgroundImage: `
-              radial-gradient(circle 800px at 700px 200px, $purple2, $$transparent),
-              radial-gradient(circle 600px at calc(100% - 300px) 300px, $mint4, $$transparent),
-              radial-gradient(circle 800px at right center, $sky3, $$transparent),
-              radial-gradient(circle 800px at right bottom, $sky1, $$transparent),
-              radial-gradient(circle 800px at calc(50% - 600px) calc(100% - 100px), $pink3, $pink1, $$transparent)
-            `,
-
             // Safari transparency bug workaround
             $$transparent: '#FDFCFD00',
             [`.${darkTheme} &`]: {

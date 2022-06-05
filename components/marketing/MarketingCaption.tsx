@@ -11,6 +11,6 @@ export const MarketingCaption = styled(Text, {
 
   defaultVariants: {
     size: 3,
-    variant: 'teal',
+    variant: 'orange',
   },
 });

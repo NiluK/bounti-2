@@ -11,15 +11,15 @@ type TitleAndMetaTagsProps = {
 };
 
 export function TitleAndMetaTags({
-  title = 'Radix UI',
-  description = 'Everything you need to build a design system, website or web app.',
+  title = 'Bounti',
+  description = 'Get paid to play and promote video games. Bounti rewards you with crypto for completing bounties and promoting your favorite games',
   image,
-  url = 'https://radix-ui.com',
+  url = 'https://bounti.xyz',
   pathname,
 }: TitleAndMetaTagsProps) {
   const router = useRouter();
 
-  const imageUrl = `${url}/social/${image || 'default.png'}`;
+  const imageUrl = 'https://bounti-images.s3.us-east-1.amazonaws.com/bounti-opengraph.png';
   const path = pathname || router.pathname;
 
   return (
@@ -33,7 +33,7 @@ export function TitleAndMetaTags({
       <meta property="og:description" content={description} />
       <meta property="og:image" content={imageUrl} />
 
-      <meta name="twitter:site" content="@radix_ui" />
+      <meta name="twitter:site" content="@bountixyz" />
       <meta name="twitter:card" content="summary_large_image" />
     </Head>
   );

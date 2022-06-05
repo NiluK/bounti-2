@@ -8,6 +8,7 @@ import {
   Container,
   Flex,
   Paragraph,
+  Image,
   Section,
   Link,
 } from '@modulz/design-system';
@@ -279,39 +280,62 @@ export const MainHero = () => {
             as="h1"
             size={{ '@initial': 8, '@bp1': 9 }}
             css={{
-              color: 'transparent',
+              color: '$hiContrast',
               WebkitBackgroundClip: 'text',
-              backgroundImage: 'radial-gradient(circle, $hiContrast, $colors$indigo12)',
               // Use padding rather than margin, or otherwise some descenders
               // may be clipped with WebkitBackgroundClip: 'text'
               pb: '$4',
               // Same issue, letters may be clipped horizontally
               px: '$2',
               mx: '-$2',
+              fontFamily: 'Krona One, sans-serif',
               fontWeight: 500,
-              fontSize: 'min(max($8, 11.2vw), $9)',
-              letterSpacing: 'max(min(-0.055em, -0.66vw), -0.07em)',
+              fontSize: 'min(max($7, 10vw), $8)',
+              letterSpacing: 'max(min(-0.055em, 0.66vw), -0.07em)',
               '@media (min-width: 900px) and (min-height: 850px)': {
-                fontSize: '80px',
-                lineHeight: '0.85',
+                fontSize: '60px',
+                lineHeight: '1.16',
               },
             }}
           >
-            Why waste
+            Play games,
             <br />
-            time reinventing
+            get
+            <Text
+              as="span"
+              size={{ '@initial': 8, '@bp1': 9 }}
+              css={{
+                color: 'transparent',
+                display: 'inline-block',
+                WebkitBackgroundClip: 'text',
+                backgroundImage: 'linear-gradient(180deg, $orange10, $red10)',
+                // Use padding rather than margin, or otherwise some descenders
+                // may be clipped with WebkitBackgroundClip: 'text'
+                fontWeight: 500,
+                ml: '$2',
+                lineHeight: '1.6',
+                fontSize: 'min(max($7, 10vw), $8)',
+                letterSpacing: 'max(min(-0.055em, 0.66vw), -0.07em)',
+                '@media (min-width: 900px) and (min-height: 850px)': {
+                  fontSize: '70px',
+                  lineHeight: '1.16',
+                  ml: '$4',
+                },
+              }}
+            >
+              Bounti.
+            </Text>
             <br />
-            UI components<span style={{ fontSize: '90%' }}>?</span>
           </Text>
-          <Box css={{ maxWidth: 500, mb: '$5' }}>
+          <Box css={{ maxWidth: 470, mb: '$5' }}>
             <Paragraph size="2" as="p">
-              Unstyled, accessible components for building high‑quality design systems and web apps
-              in React.
+              Get paid for completing bounties and promoting video games. Help beta test and
+              influence upcoming games.
             </Paragraph>
           </Box>
           <NextLink href="/docs/primitives/overview/getting-started" passHref>
             <MarketingButton as="a" icon={ArrowRightIcon}>
-              Install Primitives
+              Start Earning
             </MarketingButton>
           </NextLink>
         </Box>
@@ -357,315 +381,128 @@ export const MainHero = () => {
                 onKeyDown={onFocusAreaKeyDown}
                 onFocus={onFocusAreaFocus}
               >
-                <DemoContainer
-                  aria-hidden
+                <Image
                   css={{
-                    background: 'linear-gradient(120deg, $indigo6, $crimson5)',
-                    [`.${darkTheme} &`]: {
-                      background: 'linear-gradient(120deg, $indigo4, $plum3)',
-                    },
+                    objectFit: 'cover',
+                    width: '500px',
+                    maxWidth: '90vw',
+                    height: '100%',
+                    aspectRatio: 16 / 9,
+                    pb: '$4',
+                    borderRadius: '5px',
+                    paddingBottom: '2px',
+                    marginBottom: '$4',
                   }}
-                >
-                  <MainHeroDialog />
-                </DemoContainer>
+                  src="https://lockpick.games/wp-content/uploads/2022/02/Game-Covers-01-1.png"
+                />
               </FocusArea>
               <GrabBox>
                 <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                  Dialog
+                  Marble Mansion
                 </Text>
                 <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                  With modal and non-modal modes, fine-grained focus&nbsp;control, accessible to
-                  screen readers.
+                  A classic adventure game covering questions and subject matter from the NSW
+                  Selective Schools preparation tests. It follows the engaging storyline of a new
+                  student at Marblatts School of Magic and incorporates turn-based strategy game
+                  play.
                 </Text>
               </GrabBox>
             </CarouselSlide>
-
             <CarouselSlide>
               <FocusArea
-                aria-label="Dropdown menu component demo"
+                aria-label="Dialog component demo"
                 onKeyDown={onFocusAreaKeyDown}
                 onFocus={onFocusAreaFocus}
               >
-                <DemoContainer
-                  aria-hidden
+                <Image
                   css={{
-                    background: 'linear-gradient(120deg,  $crimson5, $blue5)',
-                    [`.${darkTheme} &`]: {
-                      background: 'linear-gradient(120deg,  $plum3, $blue3)',
-                    },
+                    objectFit: 'cover',
+                    width: '500px',
+                    maxWidth: '90vw',
+                    height: '100%',
+                    aspectRatio: 16 / 9,
+                    pb: '$4',
+                    borderRadius: '5px',
+                    paddingBottom: '2px',
+                    marginBottom: '$4',
                   }}
-                >
-                  <MainHeroDropdownMenu />
-                </DemoContainer>
+                  src="https://images.squarespace-cdn.com/content/v1/5b08e7d2620b85adeb56fa76/1646361682714-KF48CFU7PPAZK9H33KF6/Screenshot-01.png?format=2500w"
+                />
               </FocusArea>
               <GrabBox>
                 <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                  Dropdown Menu
+                  Krut: The Mythic Wings
                 </Text>
                 <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                  With submenus, checkable items, collision handling, arrow key navigation, and
-                  typeahead support.
+                  In a world full of mystical creatures and magic, the ruthless army of the Ogre
+                  invaded the land of the Garuda race. The Garuda army was defeated and the capital
+                  city was eventually fallen. Upon the destruction and despair, a badly wounded
+                  warrior found himself on a mysterious enchanted island called Himmaphan.
                 </Text>
               </GrabBox>
             </CarouselSlide>
-
             <CarouselSlide>
               <FocusArea
-                aria-label="Popover component demo"
+                aria-label="Dialog component demo"
                 onKeyDown={onFocusAreaKeyDown}
                 onFocus={onFocusAreaFocus}
               >
-                <DemoContainer
-                  aria-hidden
+                <Image
                   css={{
-                    background: 'linear-gradient(120deg, $blue5, $lime3)',
-                    [`.${darkTheme} &`]: {
-                      background: 'linear-gradient(120deg, $blue3, $sand6)',
-                    },
+                    objectFit: 'cover',
+                    width: '500px',
+                    maxWidth: '90vw',
+                    objectPosition: 'top center',
+                    height: '100%',
+                    aspectRatio: 16 / 9,
+                    pb: '$4',
+                    borderRadius: '5px',
+                    paddingBottom: '2px',
+                    marginBottom: '$4',
                   }}
-                >
-                  <MainHeroPopover />
-                </DemoContainer>
+                  src="https://miro.medium.com/max/1400/1*eax0YZCqUYchI7f7Lp7now.jpeg"
+                />
               </FocusArea>
               <GrabBox>
                 <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                  Popover
+                  Zed Run
                 </Text>
                 <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                  With fine-grained focus control, collision handling, origin-aware and
-                  collision-aware animations.
+                  The future of digital racehorse ownership is here. Race your way to the top and
+                  build your legacy today.
                 </Text>
               </GrabBox>
             </CarouselSlide>
-
             <CarouselSlide>
               <FocusArea
-                aria-label="Slider component demo"
+                aria-label="Dialog component demo"
                 onKeyDown={onFocusAreaKeyDown}
                 onFocus={onFocusAreaFocus}
               >
-                <DemoContainer
-                  aria-hidden
+                <Image
                   css={{
-                    background: 'linear-gradient(120deg, $lime3, $pink4)',
-                    [`.${darkTheme} &`]: {
-                      background: 'linear-gradient(120deg, $sand6, $pink3)',
-                    },
+                    objectFit: 'cover',
+                    width: '500px',
+                    maxWidth: '90vw',
+                    height: '100%',
+                    aspectRatio: 16 / 9,
+                    pb: '$4',
+                    borderRadius: '5px',
+                    paddingBottom: '2px',
+                    marginBottom: '$4',
                   }}
-                >
-                  <MainHeroSlider />
-                </DemoContainer>
+                  src="https://pbs.twimg.com/media/EG_2kLTWkAABbQ8.jpg"
+                />
               </FocusArea>
               <GrabBox>
                 <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                  Slider
+                  Ember Sword
                 </Text>
                 <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                  Supports keyboard and touch input, step interval, multiple thumbs for value
-                  ranges, and RTL direction.
+                  Ember Sword is a modern Free-to-Play MMORPG with a player-driven economy, a
+                  classless combat system, and scarce, tradable cosmetic collectibles
                 </Text>
               </GrabBox>
-            </CarouselSlide>
-
-            <CarouselSlide>
-              <FocusArea
-                aria-label="Scroll area component demo"
-                onKeyDown={onFocusAreaKeyDown}
-                onFocus={onFocusAreaFocus}
-              >
-                <DemoContainer
-                  aria-hidden
-                  css={{
-                    background: 'linear-gradient(120deg, $pink4, $gold5)',
-                    [`.${darkTheme} &`]: {
-                      background: 'linear-gradient(120deg, $pink3, $gold4)',
-                    },
-                  }}
-                >
-                  <MainHeroScrollArea />
-                </DemoContainer>
-              </FocusArea>
-              <GrabBox>
-                <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                  Scroll Area
-                </Text>
-                <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                  Supports custom cross-browser styling while maintaining the browser's native
-                  scroll behavior.
-                </Text>
-              </GrabBox>
-            </CarouselSlide>
-
-            <CarouselSlide>
-              <FocusArea
-                aria-label="Tabs component demo"
-                onKeyDown={onFocusAreaKeyDown}
-                onFocus={onFocusAreaFocus}
-              >
-                <DemoContainer
-                  aria-hidden
-                  css={{
-                    background: 'linear-gradient(120deg, $gold5, $tomato5)',
-                    [`.${darkTheme} &`]: {
-                      background: 'linear-gradient(120deg, $gold4, $crimson4)',
-                    },
-                  }}
-                >
-                  <MainHeroTabs />
-                </DemoContainer>
-              </FocusArea>
-              <GrabBox>
-                <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                  Tabs
-                </Text>
-                <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                  Supports arrow key navigation, horizontal/vertical orientation, controlled or
-                  uncontrolled.
-                </Text>
-              </GrabBox>
-            </CarouselSlide>
-
-            <CarouselSlide>
-              <FocusArea
-                aria-label="Accordion component demo"
-                onKeyDown={onFocusAreaKeyDown}
-                onFocus={onFocusAreaFocus}
-              >
-                <DemoContainer
-                  aria-hidden
-                  css={{
-                    background: 'linear-gradient(120deg, $tomato5, $indigo7)',
-                    [`.${darkTheme} &`]: {
-                      background: 'linear-gradient(120deg, $crimson4, $indigo5)',
-                    },
-                  }}
-                >
-                  <MainHeroAccordion />
-                </DemoContainer>
-              </FocusArea>
-              <GrabBox>
-                <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                  Accordion
-                </Text>
-                <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                  Supports one or multiple items open at the same time, keyboard navigation,
-                  collapse and expand animation.
-                </Text>
-              </GrabBox>
-            </CarouselSlide>
-
-            <CarouselSlide>
-              <FocusArea
-                aria-label="Radio group component demo"
-                onKeyDown={onFocusAreaKeyDown}
-                onFocus={onFocusAreaFocus}
-              >
-                <DemoContainer
-                  aria-hidden
-                  css={{
-                    background: 'linear-gradient(120deg, $indigo7, $cyan3)',
-                    [`.${darkTheme} &`]: {
-                      background: 'linear-gradient(120deg, $indigo5, $cyan7)',
-                    },
-                  }}
-                >
-                  <MainHeroRadioGroup />
-                </DemoContainer>
-              </FocusArea>
-              <GrabBox>
-                <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                  Radio Group
-                </Text>
-                <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                  With arrow key navigation, horizontal/vertical orientation support, controlled or
-                  uncontrolled.
-                </Text>
-              </GrabBox>
-            </CarouselSlide>
-
-            <CarouselSlide>
-              <FocusArea
-                aria-label="Toggle group component demo"
-                onKeyDown={onFocusAreaKeyDown}
-                onFocus={onFocusAreaFocus}
-              >
-                <DemoContainer
-                  aria-hidden
-                  css={{
-                    background: 'linear-gradient(120deg, $cyan3, $mint5)',
-                    [`.${darkTheme} &`]: {
-                      background: 'linear-gradient(120deg, $cyan7, $teal6)',
-                    },
-                  }}
-                >
-                  <MainHeroToggleGroup />
-                </DemoContainer>
-              </FocusArea>
-              <GrabBox>
-                <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                  Toggle Group
-                </Text>
-                <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                  A set of two-state buttons that can be toggled on or off. Supports single and
-                  multiple pressed buttons.
-                </Text>
-              </GrabBox>
-            </CarouselSlide>
-
-            <CarouselSlide>
-              <FocusArea
-                aria-label="Switch component demo"
-                onKeyDown={onFocusAreaKeyDown}
-                onFocus={onFocusAreaFocus}
-              >
-                <DemoContainer
-                  aria-hidden
-                  css={{
-                    background: 'linear-gradient(120deg, $mint5, $red3)',
-                    [`.${darkTheme} &`]: {
-                      background: 'linear-gradient(120deg, $teal6, $plum4)',
-                    },
-                  }}
-                >
-                  <MainHeroSwitch />
-                </DemoContainer>
-              </FocusArea>
-              <GrabBox>
-                <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                  Switch
-                </Text>
-                <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                  Allows the user to toggle between checked and not checked.
-                </Text>
-              </GrabBox>
-            </CarouselSlide>
-
-            <CarouselSlide>
-              <FocusArea onKeyDown={onFocusAreaKeyDown} onFocus={onFocusAreaFocus}>
-                <DemoContainer
-                  css={{
-                    backgroundColor: '$whiteA6',
-                    boxShadow: '0 0 0 1px $colors$slateA5',
-                    [`.${darkTheme} &`]: {
-                      backgroundColor: '$blackA4',
-                    },
-                  }}
-                >
-                  <Flex align="center" direction="column" gap="2">
-                    <Text size="2" variant="gray">
-                      See more components in the docs
-                    </Text>
-                    <Text size="3">
-                      <NextLink href="/docs/primitives/overview/getting-started" passHref>
-                        <Link css={{ display: 'inline-flex', alignItems: 'center' }}>
-                          View docs
-                          <ArrowRightIcon />
-                        </Link>
-                      </NextLink>
-                    </Text>
-                  </Flex>
-                </DemoContainer>
-              </FocusArea>
             </CarouselSlide>
           </CarouselSlideList>
 
@@ -676,7 +513,11 @@ export const MainHero = () => {
               left: '15px',
             }}
           >
-            <CarouselPrevious aria-label="Show previous demo" tabIndex={-1} as={CarouselArrowButton}>
+            <CarouselPrevious
+              aria-label="Show previous demo"
+              tabIndex={-1}
+              as={CarouselArrowButton}
+            >
               <ArrowLeftIcon />
             </CarouselPrevious>
           </Box>

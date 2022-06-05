@@ -29,9 +29,6 @@ export default function CaseStudy() {
         description="An open-source React component library for building high-quality, accessible design systems and web apps."
         image="default.png"
       />
-
-      <Header />
-
       <Container size={{ '@initial': 2, '@bp2': 3 }}>
         <Section>
           <Flex direction="column" align="center" css={{ textAlign: 'center', mb: '$5' }}>

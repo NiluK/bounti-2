@@ -78,8 +78,49 @@ export default class Document extends NextDocument {
 `,
             }}
           />
-          <link rel="icon" href="/favicon.png" />
-          <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+          <meta name="title" content="Bounti" />
+          <meta
+            name="description"
+            content="Get paid to play and promote video games. Bounti rewards you with crypto for completing bounties and promoting your favorite games."
+          />
+          <meta name="keywords" content="Bounti" />
+          <meta name="robots" content="index, follow" />
+          <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+          <meta name="language" content="English" />
+          <meta property="og:type" content="website" />
+          <meta property="og:title" content="Bounti" />
+          <meta property="og:url" content="https://www.bounti.xyz" />
+          <meta
+            property="og:description"
+            content="Get paid to play and promote video games. Bounti rewards you with crypto for completing bounties and promoting your favorite games."
+          />
+          <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon.png" />
+          <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+          <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+          <link rel="manifest" href="/site.webmanifest" />
+          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#111827" />
+          <meta name="msapplication-TileColor" content="#111827" />
+          <meta name="theme-color" content="#111827" />
+          <link rel="preconnect" href="https://fonts.googleapis.com" />
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+          <script src="https://kit.fontawesome.com/03d9d570da.js" crossorigin="anonymous"></script>
+
+          {/* <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+                page_path: window.location.pathname,
+              });
+            `,
+            }}
+          /> */}
           <script async src={gtagUrl} />
           <script dangerouslySetInnerHTML={{ __html: renderSnippet() }} />
         </Head>

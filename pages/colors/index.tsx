@@ -21,8 +21,6 @@ import { Header } from '@components/Header';
 export default function ColorsHome() {
   return (
     <Box>
-      <Header />
-
       <Box css={{ py: '$4', mt: '$2' }}>
         <TitleAndMetaTags
           title="Colors – Radix UI"

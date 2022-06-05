@@ -92,6 +92,8 @@ function App({ Component, pageProps }: AppProps) {
         value={{ light: 'light-theme', dark: darkTheme.className }}
         defaultTheme="system"
       >
+        <Header />
+
         {!isDocsPage && <Component {...pageProps} />}
         {isDocsPage && (
           <>
@@ -110,24 +112,23 @@ function App({ Component, pageProps }: AppProps) {
                 },
               }}
             >
-              <Header />
-            </Box>
-            <Box css={{ pt: '$8', position: 'relative', zIndex: 1 }}>
-              {isPrimitivesDocs && (
-                <PrimitivesPage>
-                  <Component {...pageProps} />
-                </PrimitivesPage>
-              )}
-              {isDesignSystemDocs && (
-                <DesignSystemPage>
-                  <Component {...pageProps} />
-                </DesignSystemPage>
-              )}
-              {isColorsDocs && (
-                <ColorsPage>
-                  <Component {...pageProps} />
-                </ColorsPage>
-              )}
+              <Box css={{ pt: '$8', position: 'relative', zIndex: 1 }}>
+                {isPrimitivesDocs && (
+                  <PrimitivesPage>
+                    <Component {...pageProps} />
+                  </PrimitivesPage>
+                )}
+                {isDesignSystemDocs && (
+                  <DesignSystemPage>
+                    <Component {...pageProps} />
+                  </DesignSystemPage>
+                )}
+                {isColorsDocs && (
+                  <ColorsPage>
+                    <Component {...pageProps} />
+                  </ColorsPage>
+                )}
+              </Box>
             </Box>
           </>
         )}

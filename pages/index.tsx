@@ -23,12 +23,15 @@ export default function PrimitivesHome() {
         description="An open-source React component library for building high-quality, accessible design systems and web apps."
         image="default.png"
       />
-      <FancyBackground>
-        <Header />
-        <MainHero />
-      </FancyBackground>
-      <CaseStudiesSection />
+      <MainHero />
       <Container size="3">
+        <Separator size="2" />
+      </Container>
+      <Box css={{ overflow: 'hidden' }}>
+        <BenefitsSection />
+      </Box>
+      {/* <CaseStudiesSection /> */}
+      {/* <Container size="3">
         <Separator size="2" />
       </Container>
       <Box css={{ overflow: 'hidden' }}>
@@ -39,17 +42,18 @@ export default function PrimitivesHome() {
       <AccessibilitySection />
       <DeveloperExperienceSection />
       <AdoptionSection />
+  */}
       <Container size="3">
         <Separator size="2" />
       </Container>
       <CommunitySection />
-      <Container size="3">
+      {/* <Container size="3">
         <Separator size="2" />
       </Container>
       <OtherProductsSection />
       <Container size="3">
         <Footer />
-      </Container>
+      </Container> */}
     </Box>
   );
 }

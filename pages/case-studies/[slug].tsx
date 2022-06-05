@@ -54,8 +54,6 @@ export default function CaseStudy({ frontmatter, code }: CaseStudyPage) {
         image="default.png"
       />
 
-      <Header />
-
       <Container size={{ '@initial': 2, '@bp2': 3 }}>
         <Section>
           <Grid

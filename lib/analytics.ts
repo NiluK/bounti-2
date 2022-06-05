@@ -6,7 +6,7 @@ type WindowWithAnalytics = Window &
     gtag: any;
   };
 
-const trackingID = 'G-MNCYB63WJR';
+const trackingID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS;
 
 export const useAnalytics = () => {
   React.useEffect(() => {
