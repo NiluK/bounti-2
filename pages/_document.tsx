@@ -103,7 +103,7 @@ export default class Document extends NextDocument {
           <meta name="theme-color" content="#111827" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-          <script src="https://kit.fontawesome.com/03d9d570da.js" crossorigin="anonymous"></script>
+          <script src="https://kit.fontawesome.com/03d9d570da.js" crossOrigin="anonymous"></script>
 
           {/* <script
             async

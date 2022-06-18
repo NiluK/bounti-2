@@ -1,17 +1,49 @@
 import React from 'react';
-import NextLink from 'next/link';
-import { Box, Text, styled, Container, Paragraph, Image, Section } from '@modulz/design-system';
+import {
+  Box,
+  Grid,
+  Text,
+  Container,
+  Flex,
+  Heading,
+  Paragraph,
+  Section,
+  Separator,
+  styled,
+  darkTheme,
+  Image,
+} from '@modulz/design-system';
+import { MarketingCaption } from '../marketing/MarketingCaption';
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
-import { MarketingButton } from './MarketingButton';
+import { MarketingButton } from '../marketing/MarketingButton';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faPlay,
+  faGamepad,
+  faComment,
+  faUserAstronaut,
+  faSackDollar,
+} from '@fortawesome/free-solid-svg-icons';
+import { useComposedRefs } from '@radix-ui/react-compose-refs';
+import NextLink from 'next/link';
 import {
   Carousel,
   CarouselSlideList,
   CarouselSlide,
   CarouselNext,
   CarouselPrevious,
-} from './Carousel';
-
-import { useComposedRefs } from '@radix-ui/react-compose-refs';
+} from '../marketing/Carousel';
+import { MainHeroDialog } from '../marketing/MainHeroDialog';
+import { MainHeroPopover } from '../marketing/MainHeroPopover';
+import { MainHeroDropdownMenu } from '../marketing/MainHeroDropdownMenu';
+import { MainHeroSlider } from '../marketing/MainHeroSlider';
+import { MainHeroTabs } from '../marketing/MainHeroTabs';
+import { MainHeroScrollArea } from '../marketing/MainHeroScrollArea';
+import { MainHeroAccordion } from '../marketing/MainHeroAccordion';
+import { MainHeroRadioGroup } from '../marketing/MainHeroRadioGroup';
+import { MainHeroToggleGroup } from '../marketing/MainHeroToggleGroup';
+import { MainHeroSwitch } from '../marketing/MainHeroSwitch';
 
 const StyledFocusArea = styled('div', {
   outline: 0,
@@ -79,9 +111,11 @@ const FocusArea = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof S
   }
 );
 
-export const MainHero = ({ games = [] }) => {
+export const GameHero = ({ game }) => {
   const lastUsedFocusArea = React.useRef<HTMLElement>(null);
   const isRoving = React.useRef(false);
+
+  const [heroImage, setHeroImage] = React.useState(game.featuredImage);
 
   React.useEffect(() => {
     lastUsedFocusArea.current = document.querySelector('[data-focus-area]');
@@ -222,124 +256,50 @@ export const MainHero = ({ games = [] }) => {
     return () => document.removeEventListener('keydown', tabListener);
   }, []);
 
-  const slides = games.map((val) => {
-    const { name, slug, summary, featuredImage } = val;
-    return (
-      <CarouselSlide>
-        <FocusArea
-          aria-label="Dialog component demo"
-          onKeyDown={onFocusAreaKeyDown}
-          onFocus={onFocusAreaFocus}
-        >
-          <NextLink href="/games/marble-mansion" passHref>
-            <Image
-              css={{
-                objectFit: 'cover',
-                width: '500px',
-                maxWidth: '90vw',
-                height: '100%',
-                aspectRatio: 16 / 9,
-                pb: '$4',
-                borderRadius: '5px',
-                paddingBottom: '2px',
-                marginBottom: '$4',
-              }}
-              src={featuredImage}
-            />
-          </NextLink>
-        </FocusArea>
-        <NextLink href={`/games/${slug}`} passHref>
-          <Text as="h3" size="5" css={{ fontWeight: 500, lineHeight: '25px' }}>
-            {name}
-          </Text>
-        </NextLink>
-        <GrabBox>
-          <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-            {summary}
-          </Text>
-        </GrabBox>
-      </CarouselSlide>
-    );
-  });
+  const developer = game.developer_game?.[0]?.developer?.name || null;
 
   return (
     <Section
       css={{
-        paddingTop: '$4',
-        // Starting at 850px viewport height, grow the padding top from $5 until it's $9.
-        '@media (min-width: 900px) and (min-height: 850px)': {
-          paddingTop: 'min($9, calc($5 + 0.35 * (100vh - 850px)))',
-        },
+        position: 'relative',
+        overflow: 'hidden',
+        pb: '$space$5',
+        pt: '$space$1',
       }}
     >
-      <Container size="3">
-        <Box css={{ mb: '$6' }}>
-          <Text
-            as="h1"
-            size={{ '@initial': 8, '@bp1': 9 }}
-            css={{
-              color: '$hiContrast',
-              WebkitBackgroundClip: 'text',
-              // Use padding rather than margin, or otherwise some descenders
-              // may be clipped with WebkitBackgroundClip: 'text'
-              pb: '$4',
-              // Same issue, letters may be clipped horizontally
-              px: '$2',
-              mx: '-$2',
-              fontFamily: 'Krona One, sans-serif',
-              fontWeight: 500,
-              fontSize: 'min(max($7, 10vw), $8)',
-              letterSpacing: 'max(min(-0.055em, 0.66vw), -0.07em)',
-              '@media (min-width: 900px) and (min-height: 850px)': {
-                fontSize: '60px',
-                lineHeight: '1.16',
-              },
-            }}
-          >
-            Play games,
-            <br />
-            get
-            <Text
-              as="span"
-              size={{ '@initial': 8, '@bp1': 9 }}
-              css={{
-                color: 'transparent',
-                display: 'inline-block',
-                WebkitBackgroundClip: 'text',
-                backgroundImage: 'linear-gradient(180deg, $orange10, $red10)',
-                // Use padding rather than margin, or otherwise some descenders
-                // may be clipped with WebkitBackgroundClip: 'text'
-                fontWeight: 500,
-                ml: '$2',
-                lineHeight: '1.6',
-                fontSize: 'min(max($7, 10vw), $8)',
-                letterSpacing: 'max(min(-0.055em, 0.66vw), -0.07em)',
-                '@media (min-width: 900px) and (min-height: 850px)': {
-                  fontSize: '70px',
-                  lineHeight: '1.16',
-                  ml: '$4',
-                },
-              }}
-            >
-              Bounti.
-            </Text>
-            <br />
-          </Text>
-          <Box css={{ maxWidth: 470, mb: '$5' }}>
-            <Paragraph size="2" as="p">
-              Get paid for completing bounties and promoting video games. Help beta test and
-              influence upcoming games.
-            </Paragraph>
-          </Box>
-          <NextLink href="/signup" passHref>
-            <MarketingButton as="a" icon={ArrowRightIcon}>
-              Start Earning
-            </MarketingButton>
-          </NextLink>
-        </Box>
-      </Container>
+      <Box css={{ mb: '$space$5' }}>
+        <MarketingCaption css={{ mb: '$1' }}>{developer}</MarketingCaption>
+        <Heading
+          as="h2"
+          size="3"
+          css={{
+            color: '$slate12',
+            mb: '$1',
+          }}
+        >
+          {game.name}
+        </Heading>
+      </Box>
 
-      <Box css={{ position: 'relative' }}>
+      <Box css={{ mb: '$1', gridColumn: `span 1` }}>
+        <Image
+          css={{
+            objectFit: 'cover',
+            width: '100%',
+            maxWidth: '90vw',
+            height: '100%',
+            objectPosition: 'top center',
+            aspectRatio: 16 / 9,
+            pb: '$4',
+            borderRadius: '5px',
+            paddingBottom: '2px',
+            marginBottom: '$4',
+          }}
+          src={heroImage}
+        />
+      </Box>
+
+      <Box css={{ position: 'relative', gridColumn: `span 1` }}>
         <Carousel>
           <CarouselSlideList
             css={{
@@ -348,7 +308,7 @@ export const MainHero = ({ games = [] }) => {
               gridAutoColumns: 'min-content',
               ox: 'auto',
               oy: 'hidden',
-              py: '$1',
+              // py: '$1',
               WebkitOverflowScrolling: 'touch',
 
               // Gap between slides
@@ -358,7 +318,7 @@ export const MainHero = ({ games = [] }) => {
               // so that the carousel starts aligned with the container component
               // the "1145" and "$5" values comes from the <Container /> component
               '$$scroll-padding': 'max($$gap, calc((100% - 1145px) / 2 + $$gap))',
-              pl: '$$scroll-padding',
+              // pl: '$$scroll-padding',
 
               // hide scrollbar
               MsOverflowStyle: 'none',
@@ -367,13 +327,159 @@ export const MainHero = ({ games = [] }) => {
                 display: 'none',
               },
 
+              mb: '$4',
+
               // Can't have nice grid gap because Safari butchers scroll padding with it
               '& > *': {
                 pr: '$$gap',
               },
             }}
           >
-            {slides}
+            <CarouselSlide>
+              <FocusArea
+                aria-label="Dialog component demo"
+                onKeyDown={onFocusAreaKeyDown}
+                onFocus={onFocusAreaFocus}
+              >
+                <div
+                  onClick={() => {
+                    setHeroImage(
+                      'https://lockpick.games/wp-content/uploads/2022/02/Game-Covers-01-1.png'
+                    );
+                  }}
+                >
+                  <Image
+                    css={{
+                      objectFit: 'cover',
+                      width: '300px',
+                      maxWidth: '90vw',
+                      objectPosition: 'top center',
+                      height: '100%',
+                      aspectRatio: 16 / 9,
+                      pb: '$4',
+                      borderRadius: '5px',
+                      paddingBottom: '2px',
+                    }}
+                    src="https://lockpick.games/wp-content/uploads/2022/02/Game-Covers-01-1.png"
+                  />
+                </div>
+              </FocusArea>
+            </CarouselSlide>
+            <CarouselSlide>
+              <FocusArea
+                aria-label="Dialog component demo"
+                onKeyDown={onFocusAreaKeyDown}
+                onFocus={onFocusAreaFocus}
+              >
+                <div
+                  onClick={() => {
+                    setHeroImage(
+                      'https://images.squarespace-cdn.com/content/v1/5b08e7d2620b85adeb56fa76/1646361682714-KF48CFU7PPAZK9H33KF6/Screenshot-01.png?format=2500w'
+                    );
+                  }}
+                >
+                  <Image
+                    css={{
+                      objectFit: 'cover',
+                      width: '300px',
+                      maxWidth: '90vw',
+                      height: '100%',
+                      objectPosition: 'top center',
+                      aspectRatio: 16 / 9,
+                      pb: '$4',
+                      borderRadius: '5px',
+                      paddingBottom: '2px',
+                    }}
+                    src="https://images.squarespace-cdn.com/content/v1/5b08e7d2620b85adeb56fa76/1646361682714-KF48CFU7PPAZK9H33KF6/Screenshot-01.png?format=2500w"
+                  />
+                </div>
+              </FocusArea>
+              {/* <GrabBox>
+                  <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
+                    Krut: The Mythic Wings
+                  </Text>
+                  <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
+                    In a world full of mystical creatures and magic, the ruthless army of the Ogre
+                    invaded the land of the Garuda race. The Garuda army was defeated and the
+                    capital city was eventually fallen. Upon the destruction and despair, a badly
+                    wounded warrior found himself on a mysterious enchanted island called Himmaphan.
+                  </Text>
+                </GrabBox> */}
+            </CarouselSlide>
+            <CarouselSlide>
+              <FocusArea
+                aria-label="Dialog component demo"
+                onKeyDown={onFocusAreaKeyDown}
+                onFocus={onFocusAreaFocus}
+              >
+                <div
+                  onClick={() => {
+                    setHeroImage('https://miro.medium.com/max/1400/1*eax0YZCqUYchI7f7Lp7now.jpeg');
+                  }}
+                >
+                  <Image
+                    css={{
+                      objectFit: 'cover',
+                      width: '300px',
+                      maxWidth: '90vw',
+                      objectPosition: 'top center',
+                      height: '100%',
+                      aspectRatio: 16 / 9,
+                      pb: '$4',
+                      borderRadius: '5px',
+                      paddingBottom: '2px',
+                    }}
+                    src="https://miro.medium.com/max/1400/1*eax0YZCqUYchI7f7Lp7now.jpeg"
+                  />
+                </div>
+              </FocusArea>
+              {/* <GrabBox>
+                  <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
+                    Zed Run
+                  </Text>
+                  <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
+                    The future of digital racehorse ownership is here. Race your way to the top and
+                    build your legacy today.
+                  </Text>
+                </GrabBox> */}
+            </CarouselSlide>
+            <CarouselSlide>
+              <FocusArea
+                aria-label="Dialog component demo"
+                onKeyDown={onFocusAreaKeyDown}
+                onFocus={onFocusAreaFocus}
+              >
+                <div
+                  onClick={() => {
+                    setHeroImage('https://pbs.twimg.com/media/EG_2kLTWkAABbQ8.jpg');
+                  }}
+                >
+                  <Image
+                    css={{
+                      objectFit: 'cover',
+                      width: '300px',
+                      maxWidth: '90vw',
+                      height: '100%',
+                      objectPosition: 'top center',
+                      aspectRatio: 16 / 9,
+                      pb: '$4',
+                      borderRadius: '5px',
+                      paddingBottom: '2px',
+                    }}
+                    src="https://pbs.twimg.com/media/EG_2kLTWkAABbQ8.jpg"
+                  />
+                </div>
+              </FocusArea>
+              {/* <GrabBox>
+                  <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
+                    Ember Sword
+                  </Text>
+                  <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
+                    Ember Sword is a modern Free-to-Play MMORPG with a player-driven economy, a
+                    classless combat system, and scarce, tradable cosmetic collectibles
+                  </Text>
+                </GrabBox> */}
+            </CarouselSlide>
           </CarouselSlideList>
 
           <Box
@@ -468,13 +574,4 @@ const CarouselArrowButton = styled('button', {
   '@media (hover: none) and (pointer: coarse)': {
     display: 'none',
   },
-});
-
-const GrabBox = styled('div', {
-  cursor: 'grab',
-  '&:active': { cursor: 'grabbing' },
-
-  // Fill in spaces between slides
-  mr: '-$$gap',
-  pr: '$$gap',
 });

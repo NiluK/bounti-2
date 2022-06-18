@@ -31,10 +31,6 @@ export const BenefitsSection = () => {
     >
       <Container size="3">
         <Box css={{ mb: '$7' }}>
-          <MarketingCaption css={{ mb: '$1' }}>
-            Games and developers you'll feel connected to.
-          </MarketingCaption>
-
           <Heading
             as="h2"
             size="3"
@@ -78,8 +74,11 @@ export const BenefitsSection = () => {
               >
                 <FontAwesomeIcon icon={faGamepad} />
               </Text>
-              Discover amazing games.
+              Play
             </Text>
+            <MarketingCaption variant="teal" css={{ mb: '$3' }}>
+              Discover amazing games.
+            </MarketingCaption>
             <Paragraph css={{ mb: '$5', color: '$gray12' }}>
               {/* It takes a <em style={{ fontFamily: 'Georgia, serif' }}>lot</em> of time to develop
               and maintain robust UI components, and it's mostly undifferentiated work. Building on
@@ -117,8 +116,12 @@ export const BenefitsSection = () => {
               >
                 <FontAwesomeIcon icon={faComment} />
               </Text>
-              Help build the community.
+              Collaborate
             </Text>
+            <MarketingCaption variant={'red'} css={{ mb: '$3' }}>
+              Help build awesome gaming communities.
+            </MarketingCaption>
+
             <Paragraph css={{ mb: '$5', color: '$gray12' }}>
               Help build a game's community. Create discussions, share ideas and give feedback that
               will help the game grow. Get responses from game developers and get rewards for
@@ -151,8 +154,11 @@ export const BenefitsSection = () => {
               >
                 <FontAwesomeIcon icon={faUserAstronaut} />
               </Text>
-              Support your favorite developers.
+              Promote
             </Text>
+            <MarketingCaption variant={'blue'} css={{ mb: '$3' }}>
+              Support your favorite developers.
+            </MarketingCaption>
             <Paragraph css={{ mb: '$5', color: '$gray12' }}>
               With bounti, you can support your favorite game developers. Help beta test and improve
               the quality of indie games and get rewarded for doing so.
@@ -185,13 +191,14 @@ export const BenefitsSection = () => {
               >
                 <FontAwesomeIcon icon={faSackDollar} />
               </Text>
-              Get rewarded for bounties
+              Earn
             </Text>
+            <MarketingCaption variant={'gold'} css={{ mb: '$3' }}>
+              Get rewarded for bounties
+            </MarketingCaption>
             <Paragraph css={{ mb: '$5', color: '$gray12' }}>
-              It takes a <em style={{ fontFamily: 'Georgia, serif' }}>lot</em> of time to develop
-              and maintain robust UI components, and it's mostly undifferentiated work. Building on
-              top of Radix components will save you time and money, so you can ship a better product
-              faster.
+              Get paid for completing bounties and promoting video games. Help beta test and
+              influence upcoming games.
             </Paragraph>
           </Box>
         </Grid>
