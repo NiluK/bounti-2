@@ -267,45 +267,47 @@ export const MainHero = ({ games = [] }) => {
   const slides = games?.map((val) => {
     const { name, slug, summary, featuredImage } = val;
     return (
-      <CarouselSlide>
-        <FocusArea
-          aria-label="Dialog component demo"
-          onKeyDown={onFocusAreaKeyDown}
-          onFocus={onFocusAreaFocus}
-        >
-          <NextLink href="/games/marble-mansion" passHref>
-            <Image
-              css={{
-                objectFit: 'cover',
-                width: '500px',
-                maxWidth: '90vw',
-                height: '100%',
-                aspectRatio: 16 / 9,
-                pb: '$4',
-                borderRadius: '5px',
-                paddingBottom: '2px',
-                marginBottom: '$4',
-              }}
-              src={featuredImage}
-            />
+      <Paper mr={'md'} shadow={'xs'} p="md">
+        <CarouselSlide>
+          <FocusArea
+            aria-label="Dialog component demo"
+            onKeyDown={onFocusAreaKeyDown}
+            onFocus={onFocusAreaFocus}
+          >
+            <NextLink href="/games/marble-mansion" passHref>
+              <Image
+                css={{
+                  objectFit: 'cover',
+                  width: '500px',
+                  maxWidth: '90vw',
+                  height: '100%',
+                  aspectRatio: 16 / 9,
+                  pb: '$4',
+                  borderRadius: '5px',
+                  paddingBottom: '2px',
+                  marginBottom: '$4',
+                }}
+                src={featuredImage}
+              />
+            </NextLink>
+          </FocusArea>
+          <NextLink href={`/games/${slug}`} passHref>
+            <Text as="h3" size="5" css={{ fontWeight: 500, lineHeight: '25px' }}>
+              {name}
+            </Text>
           </NextLink>
-        </FocusArea>
-        <NextLink href={`/games/${slug}`} passHref>
-          <Text as="h3" size="5" css={{ fontWeight: 500, lineHeight: '25px' }}>
-            {name}
-          </Text>
-        </NextLink>
-        <GrabBox>
-          <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-            {summary}
-          </Text>
-        </GrabBox>
-      </CarouselSlide>
+          <GrabBox>
+            <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
+              {summary}
+            </Text>
+          </GrabBox>
+        </CarouselSlide>
+      </Paper>
     );
   });
 
   return (
-    <Paper className={classes.root}>
+    <div className={classes.root}>
       <Text component="h1" className={classes.title}>
         Play games,
         <br />
@@ -389,7 +391,7 @@ export const MainHero = ({ games = [] }) => {
           </RadixBox>
         </Carousel>
       </RadixBox>
-    </Paper>
+    </div>
   );
 };
 

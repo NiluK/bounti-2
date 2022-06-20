@@ -89,7 +89,25 @@ export const getServerSideProps = withPageAuth({
   redirectTo: '/login',
   async getServerSideProps(ctx) {
     const supabase = supabaseServerClient(ctx);
-    const user = await getUser(ctx);
+    let user;
+    try {
+      user = await getUser(ctx);
+    } catch (e) {
+      console.error(e);
+      user = null;
+    }
+
+    console.log('user', user);
+
+    if (!user.user) {
+      return {
+        props: {
+          redirect: {
+            pathname: '/login',
+          },
+        },
+      };
+    }
 
     const { data } = await supabase
       .from('developer')

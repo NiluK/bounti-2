@@ -10,7 +10,14 @@ import NextNProgress from 'nextjs-progressbar';
 import { ProfileProvider } from 'context/profile';
 import { UserProvider } from '@supabase/auth-helpers-react';
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
-import { MantineProvider, ColorScheme, ColorSchemeProvider } from '@mantine/core';
+import {
+  MantineProvider,
+  ColorScheme,
+  ColorSchemeProvider,
+  AppShell,
+  Navbar,
+  Footer,
+} from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import { useColorScheme } from '@mantine/hooks';
 import { getCookie, setCookies } from 'cookies-next';
@@ -31,13 +38,26 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
 
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
-      <MantineProvider withGlobalStyles withNormalizeCSS theme={{ colorScheme }}>
+      <MantineProvider
+        withGlobalStyles
+        withNormalizeCSS
+        theme={{ colorScheme, primaryColor: 'orange' }}
+      >
         <NotificationsProvider>
           <UserProvider supabaseClient={supabaseClient}>
             <ProfileProvider>
-              <NextNProgress color="#F76809" />
-              <Header />
-              <Component {...pageProps} />
+              <AppShell
+                header={<Header />}
+                styles={(theme) => ({
+                  main: {
+                    backgroundColor:
+                      theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
+                  },
+                })}
+              >
+                <NextNProgress color="#F76809" />
+                <Component {...pageProps} />
+              </AppShell>
             </ProfileProvider>
           </UserProvider>
         </NotificationsProvider>
@@ -46,8 +66,13 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
   );
 }
 
-App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => ({
-  colorScheme: getCookie('mantine-color-scheme', ctx) || 'dark',
-});
+App.getInitialProps = ({ ctx }: { ctx: GetServerSidePropsContext }) => {
+  try {
+    const colorScheme = getCookie('mantine-color-scheme', ctx) || 'dark';
+    return { colorScheme };
+  } catch (error) {
+    return { colorScheme: 'dark' };
+  }
+};
 
 export default App;

@@ -1,20 +1,5 @@
 import { useEffect, useState } from 'react';
-import {
-  Avatar,
-  Box,
-  Container,
-  Flex,
-  Grid,
-  Text,
-  Heading,
-  Link,
-  Paragraph,
-  Section,
-  Separator,
-  TextField,
-  Image,
-  Button,
-} from '@modulz/design-system';
+import { Box, TextField, Image } from '@modulz/design-system';
 import { TitleAndMetaTags } from '@components/TitleAndMetaTags';
 import { MDXProvider, components } from '@components/MDXComponents';
 import { getAllFrontmatter, getMdxBySlug } from '@lib/mdx';
@@ -50,8 +35,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/router';
 import { useUser } from '@supabase/auth-helpers-react';
-
-async function signInWithProvider(provider) {
+import { getUser } from '@supabase/auth-helpers-nextjs';
+import { Container, Paper, Grid, Text, Title, TextInput, Button, Divider } from '@mantine/core';
+async function signInWithProvider(provider, setLoading) {
+  setLoading(true);
   const { user, session, error } = await supabaseClient.auth.signIn(
     {
       provider,
@@ -60,9 +47,11 @@ async function signInWithProvider(provider) {
       redirectTo: `${window.location.origin}/signup`,
     }
   );
+  setLoading(false);
 }
 
-async function signInWithEmail(email) {
+async function signInWithEmail(email, setLoading) {
+  setLoading(true);
   const { user, error } = await supabaseClient.auth.signIn(
     {
       email,
@@ -71,13 +60,15 @@ async function signInWithEmail(email) {
       redirectTo: `${window.location.origin}/signup`,
     }
   );
+  setLoading(false);
 }
 
-const Hr = styled('hr');
 const FAIcon = styled(FontAwesomeIcon);
 
-const Login = ({ game = {} }) => {
+const SignUp = ({ game = {} }) => {
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
 
   const { user } = useUser();
@@ -88,155 +79,115 @@ const Login = ({ game = {} }) => {
     }
   }, [user]);
   return (
-    <Container size={{ '@initial': 2, '@bp2': 3 }}>
-      <Section css={{ backgroundColor: '$slate4', borderRadius: '$4', m: '$2', p: '0' }}>
+    <Container size={'lg'}>
+      <Paper m="lg" shadow="xs" radius="md" p="xl" withBorder>
         <Grid
-          css={{
-            '@bp2': {
-              gap: '$1',
-              gridTemplateColumns: '1fr 1fr',
-              placeItems: 'center',
-            },
+          columns={2}
+          sx={{
+            placeItems: 'center',
           }}
         >
-          <Box
-            css={{
-              m: '$6',
-            }}
-          >
-            <Heading
-              size="1"
-              css={{
-                my: '$5',
+          <Grid.Col xs={2} md={1}>
+            <Title
+              order={3}
+              m="xl"
+              sx={{
                 textAlign: 'center',
               }}
             >
               Sign up to
               <Text
-                css={{
+                size={'xl'}
+                mx={'xs'}
+                sx={(theme) => ({
                   fontFamily: 'Krona One',
                   display: 'inline',
-                  fontSize: '$5',
-                  color: '$orange10',
-                  mx: '$2',
-                }}
+                  color: theme.colors.orange[8],
+                })}
               >
                 Bounti
               </Text>
-            </Heading>
-            <Box
-              css={{
-                mb: '$2',
+            </Title>
+            <TextInput
+              type="text"
+              className="input"
+              placeholder="Your Email"
+              value={email}
+              onChange={(event) => {
+                setEmail(event.target.value);
+              }}
+            />
+            <Button
+              my={'sm'}
+              fullWidth
+              loading={loading}
+              sx={(theme) => ({
+                backgroundColor: theme.colors.orange[8],
+                color: theme.colors.white,
+                borderColor: theme.colors.orange[8],
+                '&:hover': {
+                  backgroundColor: theme.colors.orange[9],
+                  borderColor: theme.colors.orange[9],
+                },
+              })}
+              onClick={() => {
+                signInWithEmail(email, setLoading);
               }}
             >
-              <TextField
-                type="text"
-                className="input"
-                placeholder="Your Email"
-                size="2"
+              Login
+            </Button>
+            <Divider my={'xl'} label="OR" labelPosition="center" />
+            <Button
+              my={'sm'}
+              fullWidth
+              loading={loading}
+              sx={(theme) => ({
+                backgroundColor: theme.colors.violet[8],
+                color: theme.colors.white,
+                borderColor: theme.colors.violet[8],
+                '&:hover': {
+                  backgroundColor: theme.colors.violet[9],
+                  borderColor: theme.colors.violet[9],
+                },
+              })}
+              onClick={() => {
+                signInWithProvider('twitch', setLoading);
+              }}
+            >
+              <FAIcon
+                icon={faTwitch}
                 css={{
-                  background: '$slateA4',
-                  '&::placeholder': {
-                    color: '$slate12',
-                  },
-                }}
-                onChange={(event) => {
-                  setEmail(event.target.value);
+                  mx: '$1',
                 }}
               />
-            </Box>
-            <Button
-              css={{
-                width: '100%',
-                backgroundColor: '$orange9',
-              }}
-              size="2"
-              onClick={() => {
-                signInWithEmail(email);
-              }}
-            >
-              Sign Up
+              Login with Twitch
             </Button>
-            <Box
-              css={{
-                mb: '$2',
+            <Button
+              my={'sm'}
+              fullWidth
+              loading={loading}
+              sx={(theme) => ({
+                backgroundColor: theme.colors.indigo[8],
+                color: theme.colors.white,
+                borderColor: theme.colors.indigo[8],
+                '&:hover': {
+                  backgroundColor: theme.colors.indigo[9],
+                  borderColor: theme.colors.indigo[9],
+                },
+              })}
+              onClick={() => {
+                signInWithProvider('discord', setLoading);
               }}
             >
-              <Text
-                as="span"
+              <FAIcon
+                icon={faDiscord}
                 css={{
-                  my: '$5',
-                  textAlign: 'center',
-                  color: '$blackA12',
+                  mx: '$1',
                 }}
-                size="6"
-              >
-                <Hr as="hr" css={{ borderColor: '$slate3', my: '$4' }} />
-                {/* <Button
-                  css={{
-                    width: '100%',
-                    mb: '$1',
-                  }}
-                  size="2"
-                  onClick={() => {
-                    signInWithProvider('github');
-                  }}
-                >
-                  <FAIcon
-                    icon={faGithub}
-                    css={{
-                      mx: '$1',
-                    }}
-                  />{' '}
-                  <Text
-                    css={{
-                      fontWeight: '500',
-                    }}
-                  >
-                    Login with Github
-                  </Text>
-                </Button> */}
-                <Button
-                  css={{
-                    width: '100%',
-                    mb: '$1',
-                    backgroundColor: '#9046FF',
-                    color: 'white',
-                  }}
-                  size="2"
-                  onClick={() => {
-                    signInWithProvider('twitch');
-                  }}
-                >
-                  <FAIcon
-                    icon={faTwitch}
-                    css={{
-                      mx: '$1',
-                    }}
-                  />
-                  Login with Twitch
-                </Button>
-                <Button
-                  css={{
-                    width: '100%',
-                    mb: '$1',
-                    backgroundColor: '#5769E9',
-                    color: 'white',
-                  }}
-                  size="2"
-                  onClick={() => {
-                    signInWithProvider('discord');
-                  }}
-                >
-                  <FAIcon
-                    icon={faDiscord}
-                    css={{
-                      mx: '$1',
-                    }}
-                  />
-                  Login with Discord
-                </Button>
-                {/* <Button
+              />
+              Login with Discord
+            </Button>
+            {/* <Button
                   css={{
                     width: '100%',
                     mb: '$1',
@@ -256,7 +207,7 @@ const Login = ({ game = {} }) => {
                   />
                   Login with Twitter
                 </Button> */}
-                {/* <Button
+            {/* <Button
                   css={{
                     width: '100%',
                     mb: '$1',
@@ -276,38 +227,67 @@ const Login = ({ game = {} }) => {
                   />
                   Login with Facebook
                 </Button> */}
-                <Button
-                  css={{
-                    width: '100%',
-                    mb: '$1',
-                  }}
-                  size="2"
-                  onClick={() => {
-                    signInWithProvider('google');
-                  }}
-                >
-                  <FAIcon
-                    icon={faGoogle}
-                    css={{
-                      mx: '$1',
-                    }}
-                  />
-                  Login with Google
-                </Button>
-              </Text>
-            </Box>
-          </Box>
-          <Image
-            css={{
-              borderTopRightRadius: '$4',
-              borderBottomRightRadius: '$4',
-            }}
-            src="https://bounti-images.s3.us-east-1.amazonaws.com/pexels-photo-7862418.jpeg"
-          />
+            <Button
+              my={'sm'}
+              fullWidth
+              loading={loading}
+              sx={(theme) => ({
+                backgroundColor: theme.colors.gray[8],
+                color: theme.colors.white,
+                borderColor: theme.colors.gray[8],
+                '&:hover': {
+                  backgroundColor: theme.colors.gray[9],
+                  borderColor: theme.colors.gray[9],
+                },
+              })}
+              onClick={() => {
+                signInWithProvider('google', setLoading);
+              }}
+            >
+              <FAIcon
+                icon={faGoogle}
+                css={{
+                  mx: '$1',
+                }}
+              />
+              Login with Google
+            </Button>
+          </Grid.Col>
+          <Grid.Col xs={2} md={1}>
+            <Image
+              css={{
+                borderTopRightRadius: '$4',
+                borderBottomRightRadius: '$4',
+              }}
+              src="https://bounti-images.s3.us-east-1.amazonaws.com/pexels-photo-7862418.jpeg"
+            />
+          </Grid.Col>
         </Grid>
-      </Section>
+      </Paper>
     </Container>
   );
 };
 
-export default Login;
+export async function getServerSideProps(ctx) {
+  let user = null;
+  try {
+    user = await getUser(ctx);
+  } catch (error) {
+    console.log(error);
+  }
+
+  if (user.user) {
+    return {
+      redirect: {
+        destination: '/dashboard',
+        permanent: false,
+      },
+    };
+  } else {
+    return {
+      props: {},
+    };
+  }
+}
+
+export default SignUp;

@@ -15,10 +15,7 @@ export default function PrimitivesHome({ games }) {
         image="default.png"
       />
       <MainHero games={games} />
-      <Divider my="xs" label="Label in the center" labelPosition="center" />
-      <Paper css={{ overflow: 'hidden' }}>
-        <BenefitsSection />
-      </Paper>
+      <BenefitsSection />
       {/* <CaseStudiesSection /> */}
       {/* <Container size="3">
         <Separator size="2" />
