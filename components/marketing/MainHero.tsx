@@ -1,6 +1,6 @@
 import React from 'react';
 import NextLink from 'next/link';
-import { Box, Text, styled, Container, Paragraph, Image, Section } from '@modulz/design-system';
+import { styled, Paragraph, Image, Section, Box as RadixBox } from '@modulz/design-system';
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 import { MarketingButton } from './MarketingButton';
 import {
@@ -12,6 +12,46 @@ import {
 } from './Carousel';
 
 import { useComposedRefs } from '@radix-ui/react-compose-refs';
+
+import { Paper, createStyles, Text, Box } from '@mantine/core';
+
+const useStyles = createStyles((theme) => ({
+  root: {
+    position: 'relative',
+    zIndex: 1,
+    marginTop: '2rem',
+  },
+  title: {
+    color: '$hiContrast',
+    WebkitBackgroundClip: 'text',
+    // Use padding rather than margin, or otherwise some descenders
+    // may be clipped with WebkitBackgroundClip: 'text'
+    paddingBottom: '0.5rem',
+    marginBottom: '0.5rem',
+    // Same issue, letters may be clipped horizontally
+    fontFamily: 'Krona One, sans-serif',
+    fontWeight: 500,
+    fontSize: 'min(max($7, 10vw), $8)',
+    letterSpacing: 'max(min(-0.055em, 0.66vw), -0.07em)',
+    '@media (min-width: 900px) and (min-height: 850px)': {
+      fontSize: '60px',
+      lineHeight: '1.16',
+    },
+  },
+  highlight: {
+    color: 'transparent',
+    display: 'inline-block',
+    WebkitBackgroundClip: 'text',
+    backgroundImage: `linear-gradient(180deg, ${theme.colors.orange[8]}, ${theme.colors.red[8]})`,
+    // Use padding rather than margin, or otherwise some descenders
+    // may be clipped with WebkitBackgroundClip: 'text'
+    fontWeight: 500,
+    marginLeft: theme.spacing.sm,
+    lineHeight: '1.6',
+    fontFamily: 'Krona One, sans-serif',
+    fontSize: '70px',
+  },
+}));
 
 const StyledFocusArea = styled('div', {
   outline: 0,
@@ -82,6 +122,8 @@ const FocusArea = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof S
 export const MainHero = ({ games = [] }) => {
   const lastUsedFocusArea = React.useRef<HTMLElement>(null);
   const isRoving = React.useRef(false);
+
+  const { classes, cx } = useStyles();
 
   React.useEffect(() => {
     lastUsedFocusArea.current = document.querySelector('[data-focus-area]');
@@ -222,7 +264,7 @@ export const MainHero = ({ games = [] }) => {
     return () => document.removeEventListener('keydown', tabListener);
   }, []);
 
-  const slides = games.map((val) => {
+  const slides = games?.map((val) => {
     const { name, slug, summary, featuredImage } = val;
     return (
       <CarouselSlide>
@@ -263,83 +305,31 @@ export const MainHero = ({ games = [] }) => {
   });
 
   return (
-    <Section
-      css={{
-        paddingTop: '$4',
-        // Starting at 850px viewport height, grow the padding top from $5 until it's $9.
-        '@media (min-width: 900px) and (min-height: 850px)': {
-          paddingTop: 'min($9, calc($5 + 0.35 * (100vh - 850px)))',
-        },
-      }}
-    >
-      <Container size="3">
-        <Box css={{ mb: '$6' }}>
-          <Text
-            as="h1"
-            size={{ '@initial': 8, '@bp1': 9 }}
-            css={{
-              color: '$hiContrast',
-              WebkitBackgroundClip: 'text',
-              // Use padding rather than margin, or otherwise some descenders
-              // may be clipped with WebkitBackgroundClip: 'text'
-              pb: '$4',
-              // Same issue, letters may be clipped horizontally
-              px: '$2',
-              mx: '-$2',
-              fontFamily: 'Krona One, sans-serif',
-              fontWeight: 500,
-              fontSize: 'min(max($7, 10vw), $8)',
-              letterSpacing: 'max(min(-0.055em, 0.66vw), -0.07em)',
-              '@media (min-width: 900px) and (min-height: 850px)': {
-                fontSize: '60px',
-                lineHeight: '1.16',
-              },
-            }}
-          >
-            Play games,
-            <br />
-            get
-            <Text
-              as="span"
-              size={{ '@initial': 8, '@bp1': 9 }}
-              css={{
-                color: 'transparent',
-                display: 'inline-block',
-                WebkitBackgroundClip: 'text',
-                backgroundImage: 'linear-gradient(180deg, $orange10, $red10)',
-                // Use padding rather than margin, or otherwise some descenders
-                // may be clipped with WebkitBackgroundClip: 'text'
-                fontWeight: 500,
-                ml: '$2',
-                lineHeight: '1.6',
-                fontSize: 'min(max($7, 10vw), $8)',
-                letterSpacing: 'max(min(-0.055em, 0.66vw), -0.07em)',
-                '@media (min-width: 900px) and (min-height: 850px)': {
-                  fontSize: '70px',
-                  lineHeight: '1.16',
-                  ml: '$4',
-                },
-              }}
-            >
-              Bounti.
-            </Text>
-            <br />
-          </Text>
-          <Box css={{ maxWidth: 470, mb: '$5' }}>
-            <Paragraph size="2" as="p">
-              Get paid for completing bounties and promoting video games. Help beta test and
-              influence upcoming games.
-            </Paragraph>
-          </Box>
-          <NextLink href="/signup" passHref>
-            <MarketingButton as="a" icon={ArrowRightIcon}>
-              Start Earning
-            </MarketingButton>
-          </NextLink>
-        </Box>
-      </Container>
+    <Paper className={classes.root}>
+      <Text component="h1" className={classes.title}>
+        Play games,
+        <br />
+        get
+        <Text component="span" className={classes.highlight}>
+          Bounti.
+        </Text>
+        <br />
+      </Text>
+      <Box sx={{ maxWidth: 470, marginBottom: '25px' }}>
+        <Text size="xl" component="p">
+          Get paid for completing bounties and promoting video games. Help beta test and influence
+          upcoming games.
+        </Text>
+      </Box>
+      <Box sx={{ marginBottom: '50px' }}>
+        <NextLink href="/signup" passHref>
+          <MarketingButton as="a" icon={ArrowRightIcon} color="orange">
+            Start Earning
+          </MarketingButton>
+        </NextLink>
+      </Box>
 
-      <Box css={{ position: 'relative' }}>
+      <RadixBox css={{ position: 'relative' }}>
         <Carousel>
           <CarouselSlideList
             css={{
@@ -350,16 +340,11 @@ export const MainHero = ({ games = [] }) => {
               oy: 'hidden',
               py: '$1',
               WebkitOverflowScrolling: 'touch',
-
               // Gap between slides
               $$gap: '$space$5',
-
               // calculate the left padding to apply to the scrolling list
               // so that the carousel starts aligned with the container component
               // the "1145" and "$5" values comes from the <Container /> component
-              '$$scroll-padding': 'max($$gap, calc((100% - 1145px) / 2 + $$gap))',
-              pl: '$$scroll-padding',
-
               // hide scrollbar
               MsOverflowStyle: 'none',
               scrollbarWidth: 'none',
@@ -376,7 +361,7 @@ export const MainHero = ({ games = [] }) => {
             {slides}
           </CarouselSlideList>
 
-          <Box
+          <RadixBox
             css={{
               position: 'absolute',
               top: 'calc(50% - $7)',
@@ -390,8 +375,8 @@ export const MainHero = ({ games = [] }) => {
             >
               <ArrowLeftIcon />
             </CarouselPrevious>
-          </Box>
-          <Box
+          </RadixBox>
+          <RadixBox
             css={{
               position: 'absolute',
               top: 'calc(50% - $7)',
@@ -401,10 +386,10 @@ export const MainHero = ({ games = [] }) => {
             <CarouselNext aria-label="Show next demo" tabIndex={-1} as={CarouselArrowButton}>
               <ArrowRightIcon />
             </CarouselNext>
-          </Box>
+          </RadixBox>
         </Carousel>
-      </Box>
-    </Section>
+      </RadixBox>
+    </Paper>
   );
 };
 

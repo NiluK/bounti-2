@@ -111,7 +111,7 @@ const Login = ({ game = {} }) => {
                 textAlign: 'center',
               }}
             >
-              Sign up to
+              Login to
               <Text
                 css={{
                   fontFamily: 'Krona One',
@@ -155,7 +155,7 @@ const Login = ({ game = {} }) => {
                 signInWithEmail(email);
               }}
             >
-              Sign Up
+              Login
             </Button>
             <Box
               css={{

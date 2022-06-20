@@ -3,7 +3,13 @@ import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
 import { getCssText } from '@modulz/design-system';
 import { renderSnippet, gtagUrl } from '@lib/analytics';
 
+import { createGetInitialProps } from '@mantine/next';
+
+const getInitialProps = createGetInitialProps();
+
 export default class Document extends NextDocument {
+  static getInitialProps = getInitialProps;
+
   render() {
     return (
       <Html lang="en">
@@ -123,6 +129,20 @@ export default class Document extends NextDocument {
           /> */}
           <script async src={gtagUrl} />
           <script dangerouslySetInnerHTML={{ __html: renderSnippet() }} />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+          (function(h,o,t,j,a,r){
+              h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+              h._hjSettings={hjid:3027196,hjsv:6};
+              a=o.getElementsByTagName('head')[0];
+              r=o.createElement('script');r.async=1;
+              r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+              a.appendChild(r);
+          })(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');
+          `,
+            }}
+          />
         </Head>
         <body>
           <Main />

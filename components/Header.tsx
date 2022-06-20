@@ -1,253 +1,152 @@
-import React from 'react';
-import NextLink from 'next/link';
-import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import {
-  Box,
+  createStyles,
+  Header as Nav,
   Container,
+  Group,
+  Burger,
+  Paper,
+  Anchor,
+  Transition,
   Text,
-  Button,
-  styled,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  Flex,
-  Link,
-  Avatar,
-} from '@modulz/design-system';
-import { BoxLink } from '@components/BoxLink';
-import { ThemeToggle } from './ThemeToggle';
+} from '@mantine/core';
+import { useBooleanToggle } from '@mantine/hooks';
+import ColorSwitch from './ColorSwitch';
+import Link from 'next/link';
 
-import { useContext } from 'react';
-import { UserContext } from '@lib/context';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCog, faSignOut, faUserCircle } from '@fortawesome/free-solid-svg-icons';
-import supabase from '@lib/supabase';
+const HEADER_HEIGHT = 60;
 
-const logout = async () => {
-  await supabase.auth.signOut();
-};
+const useStyles = createStyles((theme) => ({
+  root: {
+    zIndex: 1000,
+    position: 'sticky',
+    top: 0,
+  },
 
-export const Header = () => {
-  const router = useRouter();
-  const isColors = router.pathname.includes('/colors') || router.pathname.includes('/docs/colors');
+  dropdown: {
+    position: 'absolute',
+    top: HEADER_HEIGHT,
+    left: 0,
+    right: 0,
+    zIndex: 0,
+    borderTopRightRadius: 0,
+    borderTopLeftRadius: 0,
+    borderTopWidth: 0,
+    overflow: 'hidden',
 
-  const { user: fullUser, profile } = useContext(UserContext);
-  const user = fullUser?.user_metadata;
-
-  return (
-    <Box
-      as="header"
-      css={{
-        position: 'sticky',
-        top: 0,
-        zIndex: 100,
-        backgroundColor: '$gray1',
-      }}
-    >
-      <Container size="4">
-        <Flex align="center" justify="between" css={{ height: '$8' }}>
-          <NextLink href={isColors ? '/colors' : '/'} passHref>
-            <BoxLink>
-              <Text
-                as="span"
-                size={{ '@initial': 8, '@bp1': 9 }}
-                css={{
-                  color: 'transparent',
-                  display: 'inline-block',
-                  WebkitBackgroundClip: 'text',
-                  fontFamily: 'Krona One, sans-serif',
-                  backgroundImage: 'linear-gradient(180deg, $orange10, $red10)',
-                  // Use padding rather than margin, or otherwise some descenders
-                  // may be clipped with WebkitBackgroundClip: 'text'
-                  fontWeight: 500,
-                  lineHeight: '1.6',
-                  fontSize: 'min(max($7, 10vw), $7)',
-                  letterSpacing: 'max(min(-0.055em, 0.66vw), -0.07em)',
-                  '@media (min-width: 900px) and (min-height: 850px)': {
-                    fontSize: '30px',
-                    lineHeight: '1.16',
-                  },
-                }}
-              >
-                Bounti
-              </Text>
-            </BoxLink>
-          </NextLink>
-
-          <Flex
-            align="center"
-            gap={{ '@initial': 4, '@bp2': 5 }}
-            // Baseline align with the logo
-            css={{ mb: -2 }}
-          >
-            <Box css={{ display: 'none', '@bp1': { display: 'contents' } }}>
-              <>
-                <NextLink href="/games" passHref>
-                  <Link>
-                    <Text>Games</Text>
-                  </Link>
-                </NextLink>
-
-                <NextLink href="/case-studies" passHref>
-                  <Link>
-                    <Text>Bounties</Text>
-                  </Link>
-                </NextLink>
-              </>
-            </Box>
-
-            {!user ? (
-              <>
-                <NextLink href="/signup" passHref>
-                  <Link
-                    css={{
-                      '&:hover': {
-                        textDecoration: 'none',
-                      },
-                    }}
-                  >
-                    <Button
-                      css={{
-                        background: '$gray4',
-                        '&:hover': {
-                          background: '$gray5',
-                        },
-                      }}
-                      size={2}
-                    >
-                      Sign up
-                    </Button>
-                  </Link>
-                </NextLink>
-                <NextLink href="/login" passHref>
-                  <Link>
-                    <Text>Login</Text>
-                  </Link>
-                </NextLink>
-              </>
-            ) : (
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Link
-                    variant="subtle"
-                    as="button"
-                    css={{
-                      bc: 'transparent',
-                      cursor: 'pointer',
-                      appearance: 'none',
-                      fontFamily: '$untitled',
-                      border: 0,
-                      p: 0,
-                      m: 0,
-                      mr: '-$1',
-                    }}
-                  >
-                    <Avatar size={3} src={user.avatar_url} fallback={user.name} />
-                  </Link>
-                </PopoverTrigger>
-                <PopoverContent hideArrow sideOffset={15} alignOffset={-15}>
-                  <Box css={{ p: '$1' }}>
-                    <HighlightLink href="/profile">
-                      <Flex gap="3">
-                        {/* <StitchesLogoIcon
-                          width="25"
-                          height="25"
-                          style={{ flex: 'none', marginTop: 2 }}
-                        /> */}
-                        <FontAwesomeIcon
-                          style={{ flex: 'none', marginTop: 2 }}
-                          icon={faUserCircle}
-                          size="2x"
-                          width="25"
-                        />
-                        <Box>
-                          <Text
-                            size="3"
-                            as="h3"
-                            css={{ fontWeight: 500, lineHeight: 1.5, letterSpacing: '-0.02em' }}
-                          >
-                            Profile
-                          </Text>
-                          <Text size="2" as="p" variant="gray" css={{ lineHeight: 1.4 }}>
-                            Your user profile
-                          </Text>
-                        </Box>
-                      </Flex>
-                    </HighlightLink>
-
-                    <NextLink href="/settings" passHref>
-                      <HighlightLink>
-                        <Flex gap="3">
-                          <FontAwesomeIcon
-                            style={{ flex: 'none', marginTop: 2 }}
-                            icon={faCog}
-                            size="2x"
-                            width="25"
-                          />
-                          <Box>
-                            <Text
-                              size="3"
-                              as="h3"
-                              css={{ fontWeight: 500, lineHeight: 1.5, letterSpacing: '-0.02em' }}
-                            >
-                              Settings
-                            </Text>
-                            <Text size="2" as="p" variant="gray" css={{ lineHeight: 1.4 }}>
-                              Your settings
-                            </Text>
-                          </Box>
-                        </Flex>
-                      </HighlightLink>
-                    </NextLink>
-                    <HighlightLink
-                      onClick={() => {
-                        logout();
-                      }}
-                    >
-                      <Flex gap="3">
-                        <FontAwesomeIcon
-                          style={{ flex: 'none', marginTop: 2, marginLeft: 10 }}
-                          icon={faSignOut}
-                        />
-                        <Box>
-                          <Text
-                            size="3"
-                            as="h3"
-                            css={{ fontWeight: 500, lineHeight: 1.5, letterSpacing: '-0.02em' }}
-                          >
-                            Sign Out
-                          </Text>
-                        </Box>
-                      </Flex>
-                    </HighlightLink>
-                  </Box>
-                </PopoverContent>
-              </Popover>
-            )}
-            <ThemeToggle />
-          </Flex>
-        </Flex>
-      </Container>
-    </Box>
-  );
-};
-
-const HighlightLink = styled('a', {
-  display: 'block',
-  color: '$hiContrast',
-  textDecoration: 'none',
-  outline: 0,
-  p: '$2',
-  br: '$2',
-  '@hover': {
-    '&:hover': {
-      bc: '$slateA3',
+    [theme.fn.largerThan('sm')]: {
+      display: 'none',
     },
   },
-  '&:focus': {
-    boxShadow: '0 0 0 2px $colors$slateA8',
+
+  header: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    height: '100%',
   },
-  '&:focus:not(:focus-visible)': {
-    boxShadow: 'none',
+
+  links: {
+    [theme.fn.smallerThan('sm')]: {
+      display: 'none',
+    },
   },
-});
+
+  logo: {
+    color: 'transparent',
+    display: 'inline-block',
+    WebkitBackgroundClip: 'text',
+    fontFamily: 'Krona One, sans-serif',
+    backgroundImage: `linear-gradient(180deg, ${theme.colors.orange[8]}, ${theme.colors.red[8]})`,
+    // Use padding rather than margin, or otherwise some descenders
+    // may be clipped with WebkitBackgroundClip: 'text'
+    fontWeight: 500,
+    lineHeight: '1.6',
+    fontSize: '30px',
+    [theme.fn.smallerThan('sm')]: {
+      fontSize: '30px',
+      lineHeight: '1.16',
+    },
+  },
+  burger: {
+    [theme.fn.largerThan('sm')]: {
+      display: 'none',
+    },
+  },
+
+  link: {
+    display: 'block',
+    lineHeight: 1,
+    padding: '8px 12px',
+    borderRadius: theme.radius.sm,
+    textDecoration: 'none',
+    color: theme.colorScheme === 'dark' ? theme.colors.dark[0] : theme.colors.gray[7],
+    fontSize: theme.fontSizes.sm,
+    fontWeight: 500,
+
+    '&:hover': {
+      backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[6] : theme.colors.gray[0],
+    },
+
+    [theme.fn.smallerThan('sm')]: {
+      borderRadius: 0,
+      padding: theme.spacing.md,
+    },
+  },
+
+  linkActive: {
+    '&, &:hover': {
+      backgroundColor:
+        theme.colorScheme === 'dark'
+          ? theme.fn.rgba(theme.colors[theme.primaryColor][9], 0.25)
+          : theme.colors[theme.primaryColor][0],
+      color: theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 3 : 7],
+    },
+  },
+}));
+
+const links = [
+  { link: '/games', label: 'Games' },
+  { link: '/bounties', label: 'Bounties' },
+  { link: '/signup', label: 'Sign Up' },
+  { link: '/login', label: 'Login' },
+];
+export function Header() {
+  const [opened, toggleOpened] = useBooleanToggle(false);
+  const { classes, cx } = useStyles();
+
+  const items = links.map((link) => (
+    <Link key={link.label} href={link.link}>
+      <a className={cx(classes.link)}>{link.label}</a>
+    </Link>
+  ));
+
+  return (
+    <Nav height={HEADER_HEIGHT} className={classes.root}>
+      <Container size="xl" className={classes.header}>
+        <Anchor component={Link} href="/">
+          <Text className={classes.logo}> Bounti</Text>
+        </Anchor>
+        <Group spacing={5} className={classes.links}>
+          {items}
+          <ColorSwitch />
+        </Group>
+        <Burger
+          opened={opened}
+          onClick={() => toggleOpened()}
+          className={classes.burger}
+          size="sm"
+        />
+        <Transition transition="pop-top-right" duration={200} mounted={opened}>
+          {(styles) => (
+            <>
+              <Paper className={classes.dropdown} withBorder style={styles}>
+                {items}
+              </Paper>
+            </>
+          )}
+        </Transition>
+      </Container>
+    </Nav>
+  );
+}

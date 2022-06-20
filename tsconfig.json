@@ -18,15 +18,9 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "incremental": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "lib/firebase.js",
-    "lib/hooks.js",
-    "lib/context.js"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "lib/firebase.js", "lib/hooks.js"],
   "exclude": ["node_modules"]
 }

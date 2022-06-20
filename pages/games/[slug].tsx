@@ -17,7 +17,7 @@ import {
 import { TitleAndMetaTags } from '@components/TitleAndMetaTags';
 import { MDXProvider, components } from '@components/MDXComponents';
 import { getAllFrontmatter, getMdxBySlug } from '@lib/mdx';
-import { Header } from '@components/Header';
+import { Header } from '@components/Header-radix';
 import { MarketingCaption } from '@components/marketing/MarketingCaption';
 import { CaseStudyLogo, CaseStudyLogoVariant } from '@components/marketing/CaseStudyLogo';
 import { Footer } from '@components/Footer';
@@ -52,7 +52,9 @@ type CaseStudyPage = {
 export default function CaseStudy({ game = {} }: CaseStudyPage) {
   const { theme } = useTheme();
 
-  console.log(theme);
+  console.log('theme', theme);
+
+  const developer = game?.developer_game?.[0]?.developer || {};
 
   return (
     <>
@@ -113,14 +115,14 @@ export default function CaseStudy({ game = {} }: CaseStudyPage) {
                     href={`https://${game.companyUrl}`}
                     style={{
                       display: 'inline-block',
-                      width: game.companyLogoWidth ?? 'auto',
-                      maxWidth: '380px',
                     }}
                   >
                     <Image
-                      src={game.developer_game[0].developer.logo}
+                      src={developer.logo}
                       css={{
-                        filter: theme == 'dark' ? 'brightness(0) invert(1)' : 'brightness(0)',
+                        maxWidth: '380px',
+                        maxHeight: '100px',
+                        filter: theme === 'dark' ? 'brightness(0) invert(1)' : 'brightness(0)',
                       }}
                     />
                   </BoxLink>

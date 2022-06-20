@@ -34,16 +34,10 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '../marketing/Carousel';
-import { MainHeroDialog } from '../marketing/MainHeroDialog';
-import { MainHeroPopover } from '../marketing/MainHeroPopover';
-import { MainHeroDropdownMenu } from '../marketing/MainHeroDropdownMenu';
-import { MainHeroSlider } from '../marketing/MainHeroSlider';
-import { MainHeroTabs } from '../marketing/MainHeroTabs';
-import { MainHeroScrollArea } from '../marketing/MainHeroScrollArea';
-import { MainHeroAccordion } from '../marketing/MainHeroAccordion';
-import { MainHeroRadioGroup } from '../marketing/MainHeroRadioGroup';
-import { MainHeroToggleGroup } from '../marketing/MainHeroToggleGroup';
-import { MainHeroSwitch } from '../marketing/MainHeroSwitch';
+
+import ReactPlayer from 'react-player';
+
+const Rp = styled(ReactPlayer);
 
 const StyledFocusArea = styled('div', {
   outline: 0,
@@ -335,151 +329,56 @@ export const GameHero = ({ game }) => {
               },
             }}
           >
-            <CarouselSlide>
-              <FocusArea
-                aria-label="Dialog component demo"
-                onKeyDown={onFocusAreaKeyDown}
-                onFocus={onFocusAreaFocus}
-              >
-                <div
-                  onClick={() => {
-                    setHeroImage(
-                      'https://lockpick.games/wp-content/uploads/2022/02/Game-Covers-01-1.png'
-                    );
-                  }}
+            {game.media?.map((media) => (
+              <CarouselSlide>
+                <FocusArea
+                  aria-label="Dialog component demo"
+                  onKeyDown={onFocusAreaKeyDown}
+                  onFocus={onFocusAreaFocus}
                 >
-                  <Image
-                    css={{
-                      objectFit: 'cover',
-                      width: '300px',
-                      maxWidth: '90vw',
-                      objectPosition: 'top center',
-                      height: '100%',
-                      aspectRatio: 16 / 9,
-                      pb: '$4',
-                      borderRadius: '5px',
-                      paddingBottom: '2px',
+                  <div
+                    onClick={() => {
+                      setHeroImage(
+                        'https://lockpick.games/wp-content/uploads/2022/02/Game-Covers-01-1.png'
+                      );
                     }}
-                    src="https://lockpick.games/wp-content/uploads/2022/02/Game-Covers-01-1.png"
-                  />
-                </div>
-              </FocusArea>
-            </CarouselSlide>
-            <CarouselSlide>
-              <FocusArea
-                aria-label="Dialog component demo"
-                onKeyDown={onFocusAreaKeyDown}
-                onFocus={onFocusAreaFocus}
-              >
-                <div
-                  onClick={() => {
-                    setHeroImage(
-                      'https://images.squarespace-cdn.com/content/v1/5b08e7d2620b85adeb56fa76/1646361682714-KF48CFU7PPAZK9H33KF6/Screenshot-01.png?format=2500w'
-                    );
-                  }}
-                >
-                  <Image
-                    css={{
-                      objectFit: 'cover',
-                      width: '300px',
-                      maxWidth: '90vw',
-                      height: '100%',
-                      objectPosition: 'top center',
-                      aspectRatio: 16 / 9,
-                      pb: '$4',
-                      borderRadius: '5px',
-                      paddingBottom: '2px',
-                    }}
-                    src="https://images.squarespace-cdn.com/content/v1/5b08e7d2620b85adeb56fa76/1646361682714-KF48CFU7PPAZK9H33KF6/Screenshot-01.png?format=2500w"
-                  />
-                </div>
-              </FocusArea>
-              {/* <GrabBox>
-                  <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                    Krut: The Mythic Wings
-                  </Text>
-                  <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                    In a world full of mystical creatures and magic, the ruthless army of the Ogre
-                    invaded the land of the Garuda race. The Garuda army was defeated and the
-                    capital city was eventually fallen. Upon the destruction and despair, a badly
-                    wounded warrior found himself on a mysterious enchanted island called Himmaphan.
-                  </Text>
-                </GrabBox> */}
-            </CarouselSlide>
-            <CarouselSlide>
-              <FocusArea
-                aria-label="Dialog component demo"
-                onKeyDown={onFocusAreaKeyDown}
-                onFocus={onFocusAreaFocus}
-              >
-                <div
-                  onClick={() => {
-                    setHeroImage('https://miro.medium.com/max/1400/1*eax0YZCqUYchI7f7Lp7now.jpeg');
-                  }}
-                >
-                  <Image
-                    css={{
-                      objectFit: 'cover',
-                      width: '300px',
-                      maxWidth: '90vw',
-                      objectPosition: 'top center',
-                      height: '100%',
-                      aspectRatio: 16 / 9,
-                      pb: '$4',
-                      borderRadius: '5px',
-                      paddingBottom: '2px',
-                    }}
-                    src="https://miro.medium.com/max/1400/1*eax0YZCqUYchI7f7Lp7now.jpeg"
-                  />
-                </div>
-              </FocusArea>
-              {/* <GrabBox>
-                  <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                    Zed Run
-                  </Text>
-                  <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                    The future of digital racehorse ownership is here. Race your way to the top and
-                    build your legacy today.
-                  </Text>
-                </GrabBox> */}
-            </CarouselSlide>
-            <CarouselSlide>
-              <FocusArea
-                aria-label="Dialog component demo"
-                onKeyDown={onFocusAreaKeyDown}
-                onFocus={onFocusAreaFocus}
-              >
-                <div
-                  onClick={() => {
-                    setHeroImage('https://pbs.twimg.com/media/EG_2kLTWkAABbQ8.jpg');
-                  }}
-                >
-                  <Image
-                    css={{
-                      objectFit: 'cover',
-                      width: '300px',
-                      maxWidth: '90vw',
-                      height: '100%',
-                      objectPosition: 'top center',
-                      aspectRatio: 16 / 9,
-                      pb: '$4',
-                      borderRadius: '5px',
-                      paddingBottom: '2px',
-                    }}
-                    src="https://pbs.twimg.com/media/EG_2kLTWkAABbQ8.jpg"
-                  />
-                </div>
-              </FocusArea>
-              {/* <GrabBox>
-                  <Text as="h3" size="3" css={{ fontWeight: 500, lineHeight: '25px' }}>
-                    Ember Sword
-                  </Text>
-                  <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
-                    Ember Sword is a modern Free-to-Play MMORPG with a player-driven economy, a
-                    classless combat system, and scarce, tradable cosmetic collectibles
-                  </Text>
-                </GrabBox> */}
-            </CarouselSlide>
+                  >
+                    {media.type === 'image' ? (
+                      <Image
+                        css={{
+                          objectFit: 'cover',
+                          width: '300px',
+                          maxWidth: '90vw',
+                          objectPosition: 'top center',
+                          height: '100%',
+                          aspectRatio: 16 / 9,
+                          pb: '$4',
+                          borderRadius: '5px',
+                          paddingBottom: '2px',
+                        }}
+                        src={media.src}
+                      />
+                    ) : (
+                      <Rp
+                        url={media.src}
+                        width={300}
+                        height={170}
+                        style={{
+                          objectFit: 'cover',
+                          width: '300px',
+                          maxWidth: '90vw',
+                          objectPosition: 'top center',
+                          height: '100%',
+                          aspectRatio: 16 / 9,
+                          pb: '$4',
+                          paddingBottom: '2px',
+                        }}
+                      />
+                    )}
+                  </div>
+                </FocusArea>
+              </CarouselSlide>
+            ))}
           </CarouselSlideList>
 
           <Box
