@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   createStyles,
   Header as Nav,
@@ -31,6 +31,7 @@ import { useBooleanToggle } from '@mantine/hooks';
 import ColorSwitch from './ColorSwitch';
 import Link from 'next/link';
 import { useUser } from '@supabase/auth-helpers-react';
+import { ProfileContext } from 'context/profile';
 
 const HEADER_HEIGHT = 60;
 
@@ -97,7 +98,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   user: {
-    color: theme.white,
+    color: theme.colorScheme === 'dark' ? '#fff' : '#000',
     padding: `${theme.spacing.xs}px ${theme.spacing.sm}px`,
     borderRadius: theme.radius.sm,
     transition: 'background-color 100ms ease',
@@ -159,6 +160,7 @@ export function Header() {
   const [opened, toggleOpened] = useBooleanToggle(false);
   const { classes, cx, theme } = useStyles();
   const { user } = useUser();
+  const { profileType, setProfileType } = useContext(ProfileContext);
 
   const [userMenuOpened, setUserMenuOpened] = useState(false);
 
@@ -203,7 +205,7 @@ export function Header() {
                       radius="xl"
                       size={20}
                     />
-                    <Text weight={500} size="sm" sx={{ lineHeight: 1, color: theme.white }} mr={3}>
+                    <Text weight={500} size="sm" mr={3}>
                       {user?.user_metadata.full_name}
                     </Text>
                     <ChevronDown size={12} />
@@ -223,8 +225,11 @@ export function Header() {
 
               <Menu.Label>Settings</Menu.Label>
               <Menu.Item icon={<Settings size={14} />}>Account settings</Menu.Item>
-              <Menu.Item icon={<SwitchHorizontal size={14} />}>
-                Switch to Developer Account
+              <Menu.Item
+                icon={<SwitchHorizontal size={14} />}
+                onClick={() => setProfileType(profileType === 'player' ? 'developer' : 'player')}
+              >
+                Switch to {profileType === 'player' ? 'Developer' : 'Player'} Profile
               </Menu.Item>
               <Link href="/api/auth/logout" passHref>
                 <Menu.Item icon={<Logout size={14} />}>Logout</Menu.Item>

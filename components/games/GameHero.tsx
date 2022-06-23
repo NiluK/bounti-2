@@ -109,7 +109,9 @@ export const GameHero = ({ game }) => {
   const lastUsedFocusArea = React.useRef<HTMLElement>(null);
   const isRoving = React.useRef(false);
 
-  const [heroImage, setHeroImage] = React.useState(game.featuredImage);
+  const [heroImage, setHeroImage] = React.useState(
+    `https://ujsgjkwpigmmnmyfdgnb.supabase.co/storage/v1/object/public/${game.featured_image}`
+  );
 
   React.useEffect(() => {
     lastUsedFocusArea.current = document.querySelector('[data-focus-area]');
@@ -250,31 +252,11 @@ export const GameHero = ({ game }) => {
     return () => document.removeEventListener('keydown', tabListener);
   }, []);
 
+  console.log('game', game);
   const developer = game.developer_game?.[0]?.developer?.name || null;
 
   return (
-    <Section
-      css={{
-        position: 'relative',
-        overflow: 'hidden',
-        pb: '$space$5',
-        pt: '$space$1',
-      }}
-    >
-      <Box css={{ mb: '$space$5' }}>
-        <MarketingCaption css={{ mb: '$1' }}>{developer}</MarketingCaption>
-        <Heading
-          as="h2"
-          size="3"
-          css={{
-            color: '$slate12',
-            mb: '$1',
-          }}
-        >
-          {game.name}
-        </Heading>
-      </Box>
-
+    <>
       <Box css={{ mb: '$1', gridColumn: `span 1` }}>
         <Image
           css={{
@@ -336,14 +318,15 @@ export const GameHero = ({ game }) => {
                   onKeyDown={onFocusAreaKeyDown}
                   onFocus={onFocusAreaFocus}
                 >
+                  {console.log('media', media)}
                   <div
                     onClick={() => {
                       setHeroImage(
-                        'https://lockpick.games/wp-content/uploads/2022/02/Game-Covers-01-1.png'
+                        `https://ujsgjkwpigmmnmyfdgnb.supabase.co/storage/v1/object/public/${media}`
                       );
                     }}
                   >
-                    {media.type === 'image' ? (
+                    {media.type !== 'image' ? (
                       <Image
                         css={{
                           objectFit: 'cover',
@@ -356,7 +339,7 @@ export const GameHero = ({ game }) => {
                           borderRadius: '5px',
                           paddingBottom: '2px',
                         }}
-                        src={media.src}
+                        src={`https://ujsgjkwpigmmnmyfdgnb.supabase.co/storage/v1/object/public/${media}`}
                       />
                     ) : (
                       <Rp
@@ -409,7 +392,7 @@ export const GameHero = ({ game }) => {
           </Box>
         </Carousel>
       </Box>
-    </Section>
+    </>
   );
 };
 

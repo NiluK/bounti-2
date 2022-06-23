@@ -1,87 +1,73 @@
 import React from 'react';
-import { Box, Container, Grid, Heading, Text, Image, Button, styled } from '@modulz/design-system';
+import { Heading, Image, styled } from '@modulz/design-system';
+import { Container, Text, Title, Divider, Grid, Paper, Button } from '@mantine/core';
 import { TitleAndMetaTags } from '@components/TitleAndMetaTags';
-import { User, withPageAuth, supabaseServerClient, getUser } from '@supabase/auth-helpers-nextjs';
+import {
+  User,
+  withPageAuth,
+  supabaseServerClient,
+  getUser,
+  supabaseClient,
+} from '@supabase/auth-helpers-nextjs';
 import NextLink from 'next/link';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 const Hr = styled('hr');
 
 export default function Dashboard({ games }) {
   return (
-    <Box>
+    <main>
       <TitleAndMetaTags title="Dashboard" />
-      <Container size="3">
+      <Container size={'lg'} my="lg">
         <Grid
-          columns={{ '@initial': 2, '@bp1': 2 }}
-          css={{
-            gridTemplateColumns: '1fr 1fr',
+          columns={2}
+          sx={{
+            placeItems: 'center',
           }}
         >
-          <Heading
-            size="2"
-            as="h1"
-            css={{
-              my: '$2',
-              display: 'inline-flex',
-            }}
-          >
-            Your Games
-          </Heading>
-          <Box
-            css={{
-              display: 'inline-flex',
-              justifyContent: 'flex-end',
-              alignItems: 'flex-end',
+          <Grid.Col span={1}>
+            <Title order={2}>Your Games</Title>
+          </Grid.Col>
+          <Grid.Col
+            span={1}
+            sx={{
+              textAlign: 'right',
             }}
           >
             <NextLink href="/games/new" passHref>
-              <Button
-                css={{
-                  backgroundColor: '$orange10',
-                  color: 'white',
-                }}
-                size="2"
-              >
-                Create a Game
+              <Button>
+                <FontAwesomeIcon icon={faPlus} />
+                <Text mx={10}>Create Game</Text>
               </Button>
             </NextLink>
-          </Box>
+          </Grid.Col>
         </Grid>
-        <Hr as="hr" css={{ borderColor: '$slate6', mb: '$4' }} />
-        <Grid columns={{ '@initial': 1, '@bp1': 3 }} gap={3}>
-          {games?.map(({ game }) => (
-            <NextLink href={`/games/${game.slug}`} key={game.id} passHref>
-              <Box
-                css={{
-                  background: '$gray3',
-                }}
-              >
-                <Image
-                  src={game.featuredImage}
-                  css={{
-                    aspectRatio: '16 / 9',
-                    objectFit: 'cover',
-                  }}
-                />
+        <Divider my="lg" />
+        <Grid columns={3}>
+          {games?.map(({ game }) => {
+            return (
+              <Grid.Col span={1}>
+                <NextLink href={`/games/${game.slug}`} key={game.id} passHref>
+                  <Paper p={10} withBorder shadow={'xs'}>
+                    <Image
+                      src={`https://ujsgjkwpigmmnmyfdgnb.supabase.co/storage/v1/object/public/${game.featured_image}`}
+                      css={{
+                        aspectRatio: '16 / 9',
+                        objectFit: 'cover',
+                      }}
+                    />
 
-                <Text
-                  as="h3"
-                  size="5"
-                  css={{
-                    fontWeight: 500,
-                    letterSpacing: '-0.03em',
-                    lineHeight: 1.3,
-                    color: '$slate12',
-                    p: '$5',
-                  }}
-                >
-                  {game.name}
-                </Text>
-              </Box>
-            </NextLink>
-          ))}
+                    <Text size="lg" mt="lg">
+                      {game.name}
+                    </Text>
+                  </Paper>
+                </NextLink>
+              </Grid.Col>
+            );
+          })}
         </Grid>
       </Container>
-    </Box>
+    </main>
   );
 }
 
@@ -97,8 +83,6 @@ export const getServerSideProps = withPageAuth({
       user = null;
     }
 
-    console.log('user', user);
-
     if (!user.user) {
       return {
         props: {
@@ -112,7 +96,7 @@ export const getServerSideProps = withPageAuth({
     const { data } = await supabase
       .from('developer')
       .select('*, developer_game(game(*))')
-      .eq('owner', user.user.id)
+      .eq('profile_owner', user.user.id)
       .single();
 
     const games = data.developer_game;

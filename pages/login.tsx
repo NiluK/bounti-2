@@ -1,20 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Box, TextField, Image } from '@modulz/design-system';
-import { TitleAndMetaTags } from '@components/TitleAndMetaTags';
-import { MDXProvider, components } from '@components/MDXComponents';
-import { getAllFrontmatter, getMdxBySlug } from '@lib/mdx';
-import { Header } from '@components/Header';
-import { MarketingCaption } from '@components/marketing/MarketingCaption';
-import { CaseStudyLogo, CaseStudyLogoVariant } from '@components/marketing/CaseStudyLogo';
-import { Footer } from '@components/Footer';
-import { BoxLink } from '@components/BoxLink';
-import { Root as AccessibleIcon } from '@radix-ui/react-accessible-icon';
-import { ArrowTopRightIcon } from '@radix-ui/react-icons';
-import { BenefitsSection } from '@components/marketing/BenefitsSection';
-import { GameHero } from '@components/games/GameHero';
-import supabase from '@lib/supabase';
-import NextLink from 'next/link';
-import { GitHubLogoIcon } from '@radix-ui/react-icons';
+import { showNotification } from '@mantine/notifications';
 import { styled } from '@modulz/design-system';
 import {
   faPlay,
@@ -36,7 +21,18 @@ import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/router';
 import { useUser } from '@supabase/auth-helpers-react';
 import { getUser } from '@supabase/auth-helpers-nextjs';
-import { Container, Paper, Grid, Text, Title, TextInput, Button, Divider } from '@mantine/core';
+import {
+  Container,
+  Paper,
+  Grid,
+  Text,
+  Title,
+  TextInput,
+  Button,
+  Divider,
+  Image,
+  Modal,
+} from '@mantine/core';
 async function signInWithProvider(provider, setLoading) {
   setLoading(true);
   const { user, session, error } = await supabaseClient.auth.signIn(
@@ -63,12 +59,12 @@ async function signInWithEmail(email, setLoading) {
   setLoading(false);
 }
 
-const Hr = styled('hr');
 const FAIcon = styled(FontAwesomeIcon);
 
 const Login = ({ game = {} }) => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
+  const [opened, setOpened] = useState(false);
 
   const router = useRouter();
 
@@ -84,6 +80,7 @@ const Login = ({ game = {} }) => {
       <Paper m="lg" shadow="xs" radius="md" p="xl" withBorder>
         <Grid
           columns={2}
+          gutter={'xl'}
           sx={{
             placeItems: 'center',
           }}
@@ -133,6 +130,7 @@ const Login = ({ game = {} }) => {
               })}
               onClick={() => {
                 signInWithEmail(email, setLoading);
+                setOpened(true);
               }}
             >
               Login
@@ -163,6 +161,29 @@ const Login = ({ game = {} }) => {
               />
               Login with Twitch
             </Button>
+            <Modal
+              opened={opened}
+              size={'lg'}
+              title=" Check your Email "
+              onClose={() => setOpened(false)}
+              sx={{
+                marginTop: '60px',
+                img: {
+                  maxWidth: '100%',
+                },
+              }}
+            >
+              <Title order={3}></Title>
+              <Text my="lg">
+                We've emailed you a magic link to{' '}
+                <Text weight="bold" color={'orange'} component="span">
+                  {email}{' '}
+                </Text>
+                .
+                <br />
+                Click that link to login or sign up
+              </Text>
+            </Modal>
             <Button
               my={'sm'}
               fullWidth
@@ -255,13 +276,7 @@ const Login = ({ game = {} }) => {
             </Button>
           </Grid.Col>
           <Grid.Col xs={2} md={1}>
-            <Image
-              css={{
-                borderTopRightRadius: '$4',
-                borderBottomRightRadius: '$4',
-              }}
-              src="https://bounti-images.s3.us-east-1.amazonaws.com/pexels-photo-7862418.jpeg"
-            />
+            <Image src="https://bounti-images.s3.us-east-1.amazonaws.com/pexels-photo-7862418.jpeg" />
           </Grid.Col>
         </Grid>
       </Paper>

@@ -10,14 +10,7 @@ import NextNProgress from 'nextjs-progressbar';
 import { ProfileProvider } from 'context/profile';
 import { UserProvider } from '@supabase/auth-helpers-react';
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
-import {
-  MantineProvider,
-  ColorScheme,
-  ColorSchemeProvider,
-  AppShell,
-  Navbar,
-  Footer,
-} from '@mantine/core';
+import { MantineProvider, ColorScheme, ColorSchemeProvider, AppShell } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import { useColorScheme } from '@mantine/hooks';
 import { getCookie, setCookies } from 'cookies-next';
@@ -50,6 +43,7 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
                 header={<Header />}
                 styles={(theme) => ({
                   main: {
+                    minHeight: '100vh',
                     backgroundColor:
                       theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
                   },

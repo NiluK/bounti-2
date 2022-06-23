@@ -45,7 +45,9 @@ export default function PrimitivesHome({ games }) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { data } = await supabaseServerClient(ctx).from('game').select('*');
+  const { data, error } = await supabaseServerClient(ctx).from('game').select('*');
+  console.log(data);
+  console.log('Error', error);
   return {
     props: {
       games: data,
