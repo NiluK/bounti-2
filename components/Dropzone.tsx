@@ -42,7 +42,14 @@ export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme) =>
   </Group>
 );
 
-export default function DropZone({ title, required, multiple, name, onChange }) {
+export default function DropZone({
+  title,
+  required,
+  multiple,
+  name,
+  onChange,
+  accept = IMAGE_MIME_TYPE,
+}) {
   const theme = useMantineTheme();
   const [files, setFiles] = useState<File[]>([]);
   return (
@@ -68,7 +75,7 @@ export default function DropZone({ title, required, multiple, name, onChange }) 
         name={name}
         onReject={(files) => console.log('rejected files', files)}
         maxSize={5 * 1024 * 1024}
-        accept={IMAGE_MIME_TYPE}
+        accept={accept}
         multiple={multiple}
         my="xs"
       >

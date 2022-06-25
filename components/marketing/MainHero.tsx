@@ -265,7 +265,7 @@ export const MainHero = ({ games = [] }) => {
   }, []);
 
   const slides = games?.map((val) => {
-    const { name, slug, summary, featuredImage } = val;
+    const { name, slug, summary, featured_image } = val;
     return (
       <Paper mr={'md'} shadow={'xs'} p="md">
         <CarouselSlide>
@@ -287,17 +287,17 @@ export const MainHero = ({ games = [] }) => {
                   paddingBottom: '2px',
                   marginBottom: '$4',
                 }}
-                src={featuredImage}
+                src={featured_image}
               />
             </NextLink>
           </FocusArea>
           <NextLink href={`/games/${slug}`} passHref>
-            <Text as="h3" size="5" css={{ fontWeight: 500, lineHeight: '25px' }}>
+            <Text weight="bold" size="lg" component="h3">
               {name}
             </Text>
           </NextLink>
           <GrabBox>
-            <Text as="p" size="3" variant="gray" css={{ lineHeight: '23px' }}>
+            <Text component="p" size="sm">
               {summary}
             </Text>
           </GrabBox>
@@ -334,12 +334,12 @@ export const MainHero = ({ games = [] }) => {
       <RadixBox css={{ position: 'relative' }}>
         <Carousel>
           <CarouselSlideList
-            css={{
+            sx={{
               display: 'grid',
               gridAutoFlow: 'column',
               gridAutoColumns: 'min-content',
-              ox: 'auto',
-              oy: 'hidden',
+              overflowX: 'auto',
+              overflowY: 'hidden',
               py: '$1',
               WebkitOverflowScrolling: 'touch',
               // Gap between slides

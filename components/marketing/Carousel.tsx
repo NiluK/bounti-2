@@ -1,5 +1,5 @@
 import React, { ReactType } from 'react';
-import { Box } from '@modulz/design-system';
+import { Box, Button } from '@mantine/core';
 import { useComposedRefs } from '@radix-ui/react-compose-refs';
 import { createContext } from '@radix-ui/react-context';
 import { useCallbackRef } from '@radix-ui/react-use-callback-ref';
@@ -210,7 +210,7 @@ export const CarouselSlide = (props) => {
 };
 
 export const CarouselNext = (props) => {
-  const { as: Comp = 'button', ...nextProps } = props;
+  const { component: Comp = Button, ...nextProps } = props;
   const context = useCarouselContext('CarouselNext');
   return (
     <Comp {...nextProps} onClick={() => context.onNextClick()} disabled={context.nextDisabled} />
@@ -218,7 +218,7 @@ export const CarouselNext = (props) => {
 };
 
 export const CarouselPrevious = (props) => {
-  const { as: Comp = 'button', ...prevProps } = props;
+  const { component: Comp = Button, ...prevProps } = props;
   const context = useCarouselContext('CarouselPrevious');
   return (
     <Comp {...prevProps} onClick={() => context.onPrevClick()} disabled={context.prevDisabled} />

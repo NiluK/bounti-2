@@ -9,6 +9,7 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
+    "@emotion/styled": "^11.9.3",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-brands-svg-icons": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
@@ -106,6 +107,7 @@
     "remark-slug": "^6.0.0",
     "smoothscroll-polyfill": "^0.4.4",
     "stripe": "^9.9.0",
+    "swiper": "^8.2.4",
     "tabler-icons-react": "^1.49.0",
     "tinycolor2": "^1.4.2"
   },
