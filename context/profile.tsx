@@ -21,9 +21,14 @@ export const ProfileProvider = (props) => {
 
   const [state, setState] = useState(initState);
 
-  console.log('props', state);
-
-  console.log('state', state);
+  // useEffect(() => {
+  //   async function fetchProfile() {
+  //     const { data } = await supabaseClient.from('player').select('*').single();
+  //     setState({ ...state, profile: data });
+  //   }
+  //   fetchProfile();
+  // }
+  // , []);
 
   return <ProfileContext.Provider value={state}>{props.children}</ProfileContext.Provider>;
 };

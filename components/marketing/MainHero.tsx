@@ -2,7 +2,7 @@ import React from 'react';
 import NextLink from 'next/link';
 import { styled, Paragraph, Image, Section, Box as RadixBox } from '@modulz/design-system';
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
-import { MarketingButton } from './MarketingButton';
+import { ArrowLeft } from 'tabler-icons-react';
 import {
   Carousel,
   CarouselSlideList,
@@ -13,7 +13,7 @@ import {
 
 import { useComposedRefs } from '@radix-ui/react-compose-refs';
 
-import { Paper, createStyles, Text, Box } from '@mantine/core';
+import { Paper, createStyles, Text, Box, Button } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -325,9 +325,9 @@ export const MainHero = ({ games = [] }) => {
       </Box>
       <Box sx={{ marginBottom: '50px' }}>
         <NextLink href="/signup" passHref>
-          <MarketingButton as="a" icon={ArrowRightIcon} color="orange">
-            Start Earning
-          </MarketingButton>
+          <Button color="orange">
+            Start Earning <ArrowRightIcon />
+          </Button>
         </NextLink>
       </Box>
 

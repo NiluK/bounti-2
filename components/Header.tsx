@@ -176,8 +176,6 @@ export function Header() {
     </Link>
   ));
 
-  console.log('user', user);
-
   return (
     <Nav height={HEADER_HEIGHT} className={classes.root}>
       <Container size="xl" className={classes.header}>

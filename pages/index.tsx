@@ -16,38 +16,12 @@ export default function PrimitivesHome({ games }) {
       />
       <MainHero games={games} />
       <BenefitsSection />
-      {/* <CaseStudiesSection /> */}
-      {/* <Container size="3">
-        <Separator size="2" />
-      </Container>
-      <Box css={{ overflow: 'hidden' }}>
-        <BenefitsSection />
-        <StatsSection />
-      </Box>
-      <ComponentHighlightsSection />
-      <AccessibilitySection />
-      <DeveloperExperienceSection />
-      <AdoptionSection />
-  */}
-      {/* <Container size="3">
-        <Separator size="2" />
-      </Container> */}
-      {/* <CommunitySection /> */}
-      {/* <Container size="3">
-        <Separator size="2" />
-      </Container>
-      <OtherProductsSection />
-      <Container size="3">
-        <Footer />
-      </Container> */}
     </Container>
   );
 }
 
 export async function getServerSideProps(ctx) {
   const { data, error } = await supabaseServerClient(ctx).from('game').select('*');
-  console.log(data);
-  console.log('Error', error);
   return {
     props: {
       games: data,

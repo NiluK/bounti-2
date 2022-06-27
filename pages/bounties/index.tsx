@@ -10,17 +10,14 @@ import {
   supabaseClient,
 } from '@supabase/auth-helpers-nextjs';
 import NextLink from 'next/link';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { truncate } from 'lodash';
 
 export default function Dashboard({ games }) {
-  console.log(games);
   return (
     <main>
       <TitleAndMetaTags title="Dashboard" />
       <Container size={'lg'} my="lg">
-        <Title order={2}>All Games</Title>
+        <Title order={2}>All Bounties</Title>
         <Divider my="lg" />
         <Grid columns={3}>
           {games?.map((game) => {
@@ -72,7 +69,7 @@ export const getServerSideProps = withPageAuth({
       };
     }
 
-    const { data } = await supabase.from('game').select('*');
+    const { data } = await supabase.from('bounty').select('*');
 
     const games = data;
     return {

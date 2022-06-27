@@ -19,6 +19,7 @@ import {
   Title,
   Modal,
   MultiSelect,
+  Select,
 } from '@mantine/core';
 import DropZone from '@components/Dropzone';
 import Link from 'next/link';
@@ -28,7 +29,7 @@ import { useForm, useController, Controller } from 'react-hook-form';
 import { camelCase } from 'lodash';
 import { useUser } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
-import { IMAGE_MIME_TYPE, mp4 } from '@mantine/dropzone';
+import { IMAGE_MIME_TYPE, MIME_TYPES } from '@mantine/dropzone';
 
 const getData = async (table) => {
   const { data } = await supabaseClient.from(table).select('*');
@@ -59,10 +60,8 @@ const handleImageUpload = (file: File): Promise<string> =>
       .catch(() => reject(new Error('Upload failed')));
   });
 
-export default function GameNew(props) {
-  const { theme } = useTheme();
-  const [opened, setOpened] = useState(false);
-  const [genre, setGenre] = useState(props.genre);
+export default function BountiNew(props) {
+  const [type, setType] = useState(props.type);
   const [platform, setPlatform] = useState(props.platform);
   const [feature, setFeature] = useState(props.feature);
   const [developer, setDeveloper] = useState(props.developer);
@@ -87,11 +86,11 @@ export default function GameNew(props) {
         })
         .single();
 
-      for (const genre in data.genre) {
-        const { data: genre_game } = await supabaseClient
-          .from('genre_game')
+      for (const type in data.type) {
+        const { data: type_game } = await supabaseClient
+          .from('type_game')
           .insert({
-            genre_uuid: data.genre[genre],
+            type_uuid: data.type[type],
             game_uuid: game.uuid,
           })
           .single();
@@ -167,12 +166,14 @@ export default function GameNew(props) {
     }
   };
 
-  const game = props.game || {};
+  const games = developer?.developer_game;
+
+  console.log('games', games);
 
   useEffect(() => {
-    if (!genre.length) {
-      const genre = getData('genre');
-      setGenre(genre);
+    if (!type?.length) {
+      const type = getData('type');
+      setType(type);
     }
     if (!platform.length) {
       const platform = getData('platform');
@@ -186,13 +187,13 @@ export default function GameNew(props) {
       const developer = getDeveloper(user);
       setDeveloper(developer);
     }
-  }, [genre, platform, feature, developer]);
+  }, [type, platform, feature, developer]);
 
-  const genreData = Array.isArray(genre)
-    ? genre.map((genre) => {
+  const typeData = Array.isArray(type)
+    ? type.map((type) => {
         return {
-          label: genre.name,
-          value: genre.uuid,
+          label: type.name,
+          value: type.uuid,
         };
       })
     : [];
@@ -201,6 +202,15 @@ export default function GameNew(props) {
         return {
           label: platform.name,
           value: platform.uuid,
+        };
+      })
+    : [];
+
+  const gamesData = Array.isArray(games)
+    ? games.map(({ game }) => {
+        return {
+          label: game.name,
+          value: game.uuid,
         };
       })
     : [];
@@ -215,32 +225,59 @@ export default function GameNew(props) {
 
   return (
     <>
-      <TitleAndMetaTags
-        title={`Create new game`}
-        description={game.description}
-        image={game.featuredImage}
-      />
+      <TitleAndMetaTags title={`Create new bounti`} />
       <Container my={20} size={'sm'}>
         <Paper p={20} withBorder shadow={'xs'}>
-          <Title order={2}>Create New Game</Title>
+          <Title order={2}>Create New Bounti</Title>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <TextInput my="sm" required label="Game Name" placeholder="" {...register('name')} />
+            <TextInput my="sm" required label="Bounti Name" placeholder="" {...register('name')} />
             <Textarea
               my="sm"
               required
-              label="Game description"
+              label="Bounti Description"
               placeholder=""
-              {...register('summary')}
+              {...register('description')}
             />
+
             <Controller
-              name="genre"
+              name="type"
               control={control}
               render={({ field }) => (
                 <MultiSelect
                   my={'sm'}
-                  data={genreData}
+                  data={typeData}
                   searchable
-                  label="Game Genre"
+                  label="Bounti Type"
+                  placeholder="QA, Marketing, etc."
+                  clearButtonLabel="Clear selection"
+                  clearable
+                  multiple
+                  required
+                  {...field}
+                />
+              )}
+            />
+
+            <TextInput
+              my="sm"
+              required
+              type="number"
+              label="Build Version"
+              placeholder=""
+              {...register('build')}
+            />
+
+            <TextInput my="sm" required label="File Link" placeholder="" {...register('file')} />
+
+            <Controller
+              name="game"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  my={'sm'}
+                  data={gamesData}
+                  searchable
+                  label="Associated Game"
                   placeholder="Adventure, action, etc."
                   clearButtonLabel="Clear selection"
                   clearable
@@ -250,6 +287,23 @@ export default function GameNew(props) {
                 />
               )}
             />
+
+            <TextInput
+              type="number"
+              my="sm"
+              required
+              label="Bounti Reward (AUD)"
+              placeholder=""
+              {...register('reward')}
+            />
+
+            <Textarea
+              my="sm"
+              label="Non Monetary Rewards"
+              placeholder=""
+              {...register('non_monetary_rewards')}
+            />
+
             <Controller
               name="platform"
               control={control}
@@ -268,16 +322,9 @@ export default function GameNew(props) {
                 />
               )}
             />
+            <Text my="xs">{'Instructions'}</Text>
             <Controller
-              name="featuredImage"
-              control={control}
-              render={({ field }) => (
-                <DropZone title={'Featured Image'} multiple={false} required {...field} />
-              )}
-            />
-            <Text my="xs">{'Game description'}</Text>
-            <Controller
-              name="description"
+              name="Instructions"
               control={control}
               render={({ field }) => (
                 <RichTextEditor
@@ -288,36 +335,7 @@ export default function GameNew(props) {
                 />
               )}
             />
-            <Controller
-              name="feature"
-              control={control}
-              render={({ field }) => (
-                <MultiSelect
-                  my={'sm'}
-                  data={featureData}
-                  label="Supported Features"
-                  placeholder="Singleplayer, Multiplayer, etc."
-                  clearButtonLabel="Clear selection"
-                  clearable
-                  multiple
-                  required
-                  {...field}
-                />
-              )}
-            />
-            <Controller
-              name="media"
-              control={control}
-              render={({ field }) => (
-                <DropZone
-                  accept={[IMAGE_MIME_TYPE, mp4]}
-                  title={'Other Media'}
-                  multiple
-                  required={false}
-                  {...field}
-                />
-              )}
-            />
+
             <Button
               my="lg"
               sx={{
@@ -329,7 +347,7 @@ export default function GameNew(props) {
               size={'md'}
               loading={loading}
             >
-              Create Game
+              Create Bounti
             </Button>
           </form>
         </Paper>
@@ -365,13 +383,14 @@ export const getServerSideProps = withPageAuth({
       .eq('profile_owner', user.user.id)
       .single();
 
-    const { data: genre } = await supabaseServerClient(ctx).from('genre').select('*');
+    const { data: type } = await supabaseServerClient(ctx).from('type').select('*');
     const { data: platform } = await supabaseServerClient(ctx).from('platform').select('*');
     const { data: feature } = await supabaseServerClient(ctx).from('feature').select('*');
+
     return {
       props: {
         developer,
-        genre,
+        type,
         platform,
         feature,
       },

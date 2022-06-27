@@ -15,7 +15,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { truncate } from 'lodash';
 
 export default function Dashboard({ games }) {
-  console.log(games);
   return (
     <main>
       <TitleAndMetaTags title="Dashboard" />
