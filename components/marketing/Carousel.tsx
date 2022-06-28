@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React, { ReactType } from 'react';
 import { Box, Button } from '@mantine/core';
 import { useComposedRefs } from '@radix-ui/react-compose-refs';
@@ -16,6 +18,8 @@ const [CarouselProvider, useCarouselContext] = createContext<{
   nextDisabled: boolean;
   prevDisabled: boolean;
 }>('Carousel');
+
+//@ts-ignore
 
 export const Carousel = (props) => {
   const ref = useRef<React.ElementRef<typeof Box>>(null);

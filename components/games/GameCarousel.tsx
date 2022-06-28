@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import React from 'react';
 import {
   Carousel,
@@ -91,11 +93,9 @@ export default function GameCarousel({ game, setHeroImage }) {
         const thisIndex = allAreas.findIndex((el) => el === event.currentTarget);
         const nextIndex = Math.min(thisIndex + 1, allAreas.length - 1);
         const nextDemo = allAreas[nextIndex];
-        isRoving.current = true;
         nextDemo.focus();
         (nextDemo as any).scrollIntoViewIfNeeded?.(true);
         lastUsedFocusArea.current = nextDemo;
-        isRoving.current = false;
       }
 
       if (event.key === 'ArrowLeft') {
@@ -104,11 +104,9 @@ export default function GameCarousel({ game, setHeroImage }) {
         const thisIndex = allAreas.findIndex((el) => el === event.currentTarget);
         const prevIndex = Math.max(thisIndex - 1, 0); // thisIndex - 1 >= 0 ? thisIndex - 1 : allAreas.length - 1;
         const prevDemo = allAreas[prevIndex];
-        isRoving.current = true;
         prevDemo.focus();
         (prevDemo as any).scrollIntoViewIfNeeded?.(true);
         lastUsedFocusArea.current = prevDemo;
-        isRoving.current = false;
       }
 
       // Tab key press moves focus to the next element after the carousel

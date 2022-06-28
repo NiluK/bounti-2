@@ -49,6 +49,13 @@ export default function DropZone({
   name,
   onChange,
   accept = IMAGE_MIME_TYPE,
+}: {
+  title: string;
+  required: boolean;
+  multiple: boolean;
+  name: string;
+  onChange: Function;
+  accept?: any;
 }) {
   const theme = useMantineTheme();
   const [files, setFiles] = useState<File[]>([]);

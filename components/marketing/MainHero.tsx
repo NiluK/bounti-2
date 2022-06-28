@@ -1,4 +1,6 @@
 import React from 'react';
+// @ts-nocheck
+
 import NextLink from 'next/link';
 import { styled, Paragraph, Image, Section, Box as RadixBox } from '@modulz/design-system';
 import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
@@ -55,6 +57,7 @@ const useStyles = createStyles((theme) => ({
 
 const StyledFocusArea = styled('div', {
   outline: 0,
+  length: '0',
   borderRadius: '$3',
   '&:focus': {
     boxShadow: '0 0 0 2px $colors$blue8',
@@ -401,7 +404,7 @@ const CarouselArrowButton = styled('button', {
   margin: 0,
   border: 0,
   padding: 0,
-
+  length: 0,
   display: 'flex',
   position: 'relative',
   zIndex: 1,
@@ -460,6 +463,7 @@ const CarouselArrowButton = styled('button', {
 const GrabBox = styled('div', {
   cursor: 'grab',
   '&:active': { cursor: 'grabbing' },
+  length: 0,
 
   // Fill in spaces between slides
   mr: '-$$gap',

@@ -28,7 +28,7 @@ import { useForm, useController, Controller } from 'react-hook-form';
 import { camelCase } from 'lodash';
 import { useUser } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
-import { IMAGE_MIME_TYPE, mp4 } from '@mantine/dropzone';
+import { IMAGE_MIME_TYPE, MIME_TYPES } from '@mantine/dropzone';
 
 const getData = async (table) => {
   const { data } = await supabaseClient.from(table).select('*');
@@ -310,7 +310,7 @@ export default function GameNew(props) {
               control={control}
               render={({ field }) => (
                 <DropZone
-                  accept={[IMAGE_MIME_TYPE, mp4]}
+                  accept={[IMAGE_MIME_TYPE, MIME_TYPES.mp4]}
                   title={'Other Media'}
                   multiple
                   required={false}

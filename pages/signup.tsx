@@ -1,36 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Box, TextField, Image } from '@modulz/design-system';
-import { TitleAndMetaTags } from '@components/TitleAndMetaTags';
-import { MDXProvider, components } from '@components/MDXComponents';
-import { getAllFrontmatter, getMdxBySlug } from '@lib/mdx';
-import { Header } from '@components/Header';
-import { MarketingCaption } from '@components/marketing/MarketingCaption';
-import { CaseStudyLogo, CaseStudyLogoVariant } from '@components/marketing/CaseStudyLogo';
-import { Footer } from '@components/Footer';
-import { BoxLink } from '@components/BoxLink';
-import { Root as AccessibleIcon } from '@radix-ui/react-accessible-icon';
-import { ArrowTopRightIcon } from '@radix-ui/react-icons';
-import { BenefitsSection } from '@components/marketing/BenefitsSection';
-import { GameHero } from '@components/games/GameHero';
-import supabase from '@lib/supabase';
-import NextLink from 'next/link';
-import { GitHubLogoIcon } from '@radix-ui/react-icons';
+
 import { styled } from '@modulz/design-system';
-import {
-  faPlay,
-  faGamepad,
-  faComment,
-  faUserAstronaut,
-  faSackDollar,
-} from '@fortawesome/free-solid-svg-icons';
-import {
-  faTwitch,
-  faGithub,
-  faDiscord,
-  faTwitter,
-  faFacebook,
-  faGoogle,
-} from '@fortawesome/free-brands-svg-icons';
+
+import { faTwitch, faDiscord, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { useRouter } from 'next/router';
