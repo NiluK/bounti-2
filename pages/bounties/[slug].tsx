@@ -59,15 +59,15 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const fetchGame = async () => {
+const fetchBounti = async () => {
   const router = useRouter();
   const { slug } = router.query;
-  const { data: game = {} } = await supabaseClient
-    .from('game')
-    .select('*, developer_game(developer(*)), genre_game(genre(*))')
+  const { data: bounti = {} } = await supabaseClient
+    .from('bounti')
+    .select('*, developer_bounti(developer(*)), type_bounti(type(*)), platform_bounti(platform(*))')
     .eq('slug', slug)
     .single();
-  return game;
+  return bounti;
 };
 
 const fetchDeveloper = async (developerId) => {
@@ -85,19 +85,21 @@ export default function CaseStudy(props) {
   const { theme } = useTheme();
   const { classes } = useStyles();
 
-  const [game, setGame] = useState(props.game);
+  const [bounti, setBounti] = useState(props.bounti);
   const [developer, setDeveloper] = useState(props.developer);
 
+  const game = bounti;
+
   useEffect(() => {
-    if (!game) {
-      const game = fetchGame();
-      setGame(game);
+    if (!bounti) {
+      const bounti = fetchBounti();
+      setBounti(bounti);
     }
     if (!developer) {
-      const developer = fetchDeveloper(game.developer_game[0].developer.uuid);
+      const developer = fetchDeveloper(bounti.developer_bounti[0].developer.uuid);
       setDeveloper(developer);
     }
-  }, [game, developer]);
+  }, [bounti, developer]);
 
   const genre = game?.genre_game;
   const feature = game?.genre_game;
@@ -111,96 +113,89 @@ export default function CaseStudy(props) {
       />
       <Container size={'lg'} my="lg">
         <Title my={'lg'} order={2}>
-          {game.name}
+          {bounti.title}
         </Title>
-        {genre?.map(({ genre }) => (
+        {/* {genre?.map(({ genre }) => (
           <Badge key={genre.name} my={'sm'}>
             {genre.name}
           </Badge>
-        ))}
-        <Tabs grow color={'orange'}>
-          <Tabs.Tab label="Overview">
-            <Paper my="lg" shadow="xs" radius="md" py="sm" withBorder>
+        ))} */}
+        {/* <Paper my="lg" shadow="xs" radius="md" py="sm" withBorder>
               <GameHero game={game} />
+            </Paper> */}
+        <Grid columns={3}>
+          <Grid.Col xs={3} sm={2}>
+            <Paper my="lg" shadow="xs" radius="md" p="sm" withBorder>
+              <TypographyStylesProvider>
+                <div
+                  dangerouslySetInnerHTML={{ __html: game?.instructions }}
+                  className={classes.description}
+                />
+              </TypographyStylesProvider>
             </Paper>
-            <Grid columns={3}>
-              <Grid.Col xs={3} sm={2}>
-                <Paper my="lg" shadow="xs" radius="md" p="sm" withBorder>
-                  <TypographyStylesProvider>
-                    <div
-                      dangerouslySetInnerHTML={{ __html: game?.description }}
-                      className={classes.description}
-                    />
-                  </TypographyStylesProvider>
-                </Paper>
-              </Grid.Col>
-              <Grid.Col xs={3} sm={1}>
-                <Paper my="lg" shadow="xs" radius="md" p="sm" withBorder>
-                  <Text size={'lg'}>
-                    More from
-                    <Link href={`/developer/${developer?.name}`}>
-                      <a className={classes.link}>{developer?.name}</a>
-                    </Link>
-                  </Text>
-                  <Text>{developer?.description}</Text>
-                  {developer.developer_game?.map(({ game }) => (
-                    <Box>
-                      <NextLink href="/games/[slug]" as={`/games/${game?.slug}`}>
-                        <a className={classes.linkActive}>
-                          <Paper my="lg" shadow="xs" radius="md" p="sm" withBorder>
-                            <Image
-                              fit="contain"
-                              sx={(theme) => ({
-                                objectFit: 'cover',
-                                [theme.fn.smallerThan('sm')]: {
-                                  width: '200px',
-                                },
-                                width: '300px',
-                                objectPosition: 'top center',
-                                height: '100%',
-                                aspectRatio: '16 / 9',
-                                p: 'sm',
-                                borderRadius: '5px',
-                                paddingBottom: '2px',
-                              })}
-                              src={game?.featured_image}
-                            />
-                            <Text size="sm">{game?.name}</Text>
-                          </Paper>
-                        </a>
-                      </NextLink>
-                    </Box>
-                  ))}
-                </Paper>
-              </Grid.Col>
-            </Grid>
-          </Tabs.Tab>
-          <Tabs.Tab label="Bounties"></Tabs.Tab>
-        </Tabs>
+          </Grid.Col>
+          <Grid.Col xs={3} sm={1}>
+            <Paper my="lg" shadow="xs" radius="md" p="sm" withBorder>
+              <Text size={'lg'}>
+                More from
+                <Link href={`/developer/${developer?.name}`}>
+                  <a className={classes.link}>{developer?.name}</a>
+                </Link>
+              </Text>
+              <Text>{developer?.description}</Text>
+              {developer.developer_game?.map(({ game }) => (
+                <Box>
+                  <NextLink href="/games/[slug]" as={`/games/${game?.slug}`}>
+                    <a className={classes.linkActive}>
+                      <Paper my="lg" shadow="xs" radius="md" p="sm" withBorder>
+                        <Image
+                          fit="contain"
+                          sx={(theme) => ({
+                            objectFit: 'cover',
+                            [theme.fn.smallerThan('sm')]: {
+                              width: '200px',
+                            },
+                            width: '300px',
+                            objectPosition: 'top center',
+                            height: '100%',
+                            aspectRatio: '16 / 9',
+                            p: 'sm',
+                            borderRadius: '5px',
+                            paddingBottom: '2px',
+                          })}
+                          src={game?.featured_image}
+                        />
+                        <Text size="sm">{game?.name}</Text>
+                      </Paper>
+                    </a>
+                  </NextLink>
+                </Box>
+              ))}
+            </Paper>
+          </Grid.Col>
+        </Grid>
       </Container>
     </>
   );
 }
 
 export async function getServerSideProps(ctx) {
-  const { data: game = {} } = await supabaseServerClient(ctx)
-    .from('game')
-    .select('*, developer_game(developer(*)), genre_game(genre(*)), platform_game(platform(*))')
+  const { data: bounti = {} } = await supabaseServerClient(ctx)
+    .from('bounti')
+    .select('*, developer_bounti(developer(*)), type_bounti(type(*)), platform_bounti(platform(*))')
     .eq('slug', ctx.params.slug)
     .single();
 
-  console.log(game);
-
   const { data: developer = {} } = await supabaseServerClient(ctx)
     .from('developer')
-    .select('*, developer_game(game(*))')
-    .eq('uuid', game.developer_game[0].developer.uuid)
+    .select('*, developer_bounti(bounti(*))')
+    .eq('uuid', bounti.developer_bounti[0].developer.uuid)
     .single();
 
   return {
     props: {
       developer,
-      game,
+      bounti,
     },
   };
 }

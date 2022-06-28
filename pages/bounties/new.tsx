@@ -18,6 +18,7 @@ import {
   Text,
   Title,
   Modal,
+  Checkbox,
   MultiSelect,
   Select,
 } from '@mantine/core';
@@ -77,89 +78,62 @@ export default function BountiNew(props) {
     try {
       setLoading(true);
 
-      const { data: game } = await supabaseClient
-        .from('game')
+      const { data: bounti } = await supabaseClient
+        .from('bounti')
         .insert({
-          name: data.name,
-          description: data.description,
-          slug: camelCase(data.name),
+          title: data.title,
+          subtitle: data.subtitle,
+          slug: camelCase(data.title),
+          instructions: data.instructions,
+          non_monetary_rewards: data.non_monetary_rewards,
+          reward_distribution: data.reward_distribution,
+          reward_number: data.reward_number,
+          reward_value: data.reward_value,
+          file: data.file,
+          build: data.build,
         })
         .single();
 
-      for (const type in data.type) {
-        const { data: type_game } = await supabaseClient
-          .from('type_game')
-          .insert({
-            type_uuid: data.type[type],
-            game_uuid: game.uuid,
-          })
-          .single();
-      }
+      console.log('bounti', bounti);
 
-      for (const feature in data.feature) {
-        const { data: feature_game } = await supabaseClient
-          .from('feature_game')
-          .insert({
-            feature_uuid: data.feature[feature],
-            game_uuid: game.uuid,
-          })
-          .single();
-      }
+      const { data: type_bounti } = await supabaseClient
+        .from('type_bounti')
+        .insert({
+          type_uuid: data.type,
+          bounti_uuid: bounti.uuid,
+        })
+        .single();
+
+      const { data: game } = await supabaseClient
+        .from('game_bounti')
+        .insert({
+          game_uuid: data.game,
+          bounti_uuid: bounti.uuid,
+        })
+        .single();
 
       for (const platform in data.platform) {
         const { data: platform_game } = await supabaseClient
-          .from('platform_game')
+          .from('platform_bounti')
           .insert({
             platform_uuid: data.platform[platform],
-            game_uuid: game.uuid,
+            bounti_uuid: bounti.uuid,
           })
           .single();
       }
 
-      const mediaUrls = [];
-
-      for (const media in data.media) {
-        const { data: mediaData } = await supabaseClient.storage
-          .from('games')
-          .upload(`${game.uuid}/media/${data.media[media].path}`, data.media[media], {
-            upsert: true,
-          });
-        mediaUrls.push(mediaData.Key);
-      }
-
-      const featuredImage = await supabaseClient.storage
-        .from('games')
-        .upload(`${game.uuid}/featured-image/${data.featuredImage.path}`, data.featuredImage, {
-          upsert: true,
-        });
-
-      console.log('featured_image', featuredImage);
-
       const { data: updatedDeveloper } = await supabaseClient
-        .from('developer_game')
+        .from('developer_bounti')
         .insert({
           developer_uuid: developer.uuid,
-          game_uuid: game.uuid,
+          bounti_uuid: bounti.uuid,
         })
         .match({ uuid: developer })
         .single();
 
-      console.log('updatedDeveloper_Game', updatedDeveloper);
-
-      const { data: updatedGame } = await supabaseClient
-        .from('game')
-        .update({
-          featured_image: featuredImage.data.Key,
-          media: mediaUrls,
-        })
-        .match({ uuid: game.uuid })
-        .single();
-
-      console.log('updatedGame', updatedGame);
-
       setLoading(false);
 
-      router.push(`/games/${updatedGame.slug}`);
+      router.push(`/bounties/${bounti.slug}`);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -171,7 +145,7 @@ export default function BountiNew(props) {
   console.log('games', games);
 
   useEffect(() => {
-    if (!type?.length) {
+    if (!type.length) {
       const type = getData('type');
       setType(type);
     }
@@ -230,20 +204,20 @@ export default function BountiNew(props) {
         <Paper p={20} withBorder shadow={'xs'}>
           <Title order={2}>Create New Bounti</Title>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <TextInput my="sm" required label="Bounti Name" placeholder="" {...register('name')} />
+            <TextInput my="sm" required label="Bounti Name" placeholder="" {...register('title')} />
             <Textarea
               my="sm"
               required
               label="Bounti Description"
               placeholder=""
-              {...register('description')}
+              {...register('subtitle')}
             />
 
             <Controller
               name="type"
               control={control}
               render={({ field }) => (
-                <MultiSelect
+                <Select
                   my={'sm'}
                   data={typeData}
                   searchable
@@ -265,6 +239,8 @@ export default function BountiNew(props) {
               label="Build Version"
               placeholder=""
               {...register('build')}
+              step={0.01}
+              min={0}
             />
 
             <TextInput my="sm" required label="File Link" placeholder="" {...register('file')} />
@@ -293,8 +269,27 @@ export default function BountiNew(props) {
               my="sm"
               required
               label="Bounti Reward (AUD)"
+              min={0}
               placeholder=""
-              {...register('reward')}
+              {...register('reward_value')}
+            />
+
+            <TextInput
+              type="number"
+              my="sm"
+              min={1}
+              required
+              label="Total Number of Prizes"
+              placeholder=""
+              {...register('reward_number')}
+            />
+
+            <Textarea
+              my="sm"
+              label="How will rewards be distributed?"
+              required
+              placeholder=""
+              {...register('reward_distribution')}
             />
 
             <Textarea
@@ -322,9 +317,9 @@ export default function BountiNew(props) {
                 />
               )}
             />
-            <Text my="xs">{'Instructions'}</Text>
+            <Text my="xs">{'Instructions *'}</Text>
             <Controller
-              name="Instructions"
+              name="instructions"
               control={control}
               render={({ field }) => (
                 <RichTextEditor
@@ -334,6 +329,12 @@ export default function BountiNew(props) {
                   onImageUpload={handleImageUpload}
                 />
               )}
+            />
+
+            <Checkbox
+              my="lg"
+              label="This bounti requires an NDA to be signed"
+              {...register('requires_nda')}
             />
 
             <Button

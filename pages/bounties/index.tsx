@@ -69,7 +69,7 @@ export const getServerSideProps = withPageAuth({
       };
     }
 
-    const { data } = await supabase.from('bounty').select('*');
+    const { data } = await supabase.from('bounti').select('*');
 
     const games = data;
     return {
