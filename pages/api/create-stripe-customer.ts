@@ -1,5 +1,5 @@
 import initStripe from 'stripe';
-import supabase from '@lib/supabase';
+import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 
 const handler = async (req: any, res: any) => {
   if (req.query.API_ROUTE_SECRET !== process.env.API_ROUTE_SECRET) {
@@ -18,7 +18,7 @@ const handler = async (req: any, res: any) => {
   const customer = await stripe.customers.create({
     email: req.body.email,
   });
-  await supabase
+  await supabaseClient
     .from('profile')
     .insert({
       sripe_customer_id: customer.id,
