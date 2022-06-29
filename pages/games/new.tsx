@@ -84,6 +84,7 @@ export default function GameNew(props) {
           name: data.name,
           description: data.description,
           slug: camelCase(data.name),
+          website: data.website,
         })
         .single();
 
@@ -134,8 +135,6 @@ export default function GameNew(props) {
           upsert: true,
         });
 
-      console.log('featured_image', featuredImage);
-
       const { data: updatedDeveloper } = await supabaseClient
         .from('developer_game')
         .insert({
@@ -145,8 +144,6 @@ export default function GameNew(props) {
         .match({ uuid: developer })
         .single();
 
-      console.log('updatedDeveloper_Game', updatedDeveloper);
-
       const { data: updatedGame } = await supabaseClient
         .from('game')
         .update({
@@ -155,8 +152,6 @@ export default function GameNew(props) {
         })
         .match({ uuid: game.uuid })
         .single();
-
-      console.log('updatedGame', updatedGame);
 
       setLoading(false);
 
@@ -228,9 +223,16 @@ export default function GameNew(props) {
             <Textarea
               my="sm"
               required
-              label="Game description"
+              label="Game Summary"
               placeholder=""
               {...register('summary')}
+            />
+            <TextInput
+              my="sm"
+              required
+              label="Website URL"
+              placeholder=""
+              {...register('website')}
             />
             <Controller
               name="genre"
@@ -275,7 +277,7 @@ export default function GameNew(props) {
                 <DropZone title={'Featured Image'} multiple={false} required {...field} />
               )}
             />
-            <Text my="xs">{'Game description'}</Text>
+            <Text my="xs">{'About this game'}</Text>
             <Controller
               name="description"
               control={control}

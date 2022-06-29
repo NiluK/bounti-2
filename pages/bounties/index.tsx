@@ -23,7 +23,7 @@ export default function Dashboard({ games }) {
           {games?.map((game) => {
             return (
               <Grid.Col span={1}>
-                <NextLink href={`/games/${game.slug}`} key={game.id} passHref>
+                <NextLink href={`/bounties/${game.slug}`} key={game.id} passHref>
                   <Paper p={10} withBorder shadow={'xs'}>
                     <Image
                       src={`${game.featured_image}`}

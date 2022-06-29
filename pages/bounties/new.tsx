@@ -73,8 +73,6 @@ export default function BountiNew(props) {
   const { register, handleSubmit, watch, control } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
-
     try {
       setLoading(true);
 
