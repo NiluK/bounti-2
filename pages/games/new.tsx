@@ -126,7 +126,9 @@ export default function GameNew(props) {
           .upload(`${game.uuid}/media/${data.media[media].path}`, data.media[media], {
             upsert: true,
           });
-        mediaUrls.push(mediaData.Key);
+        mediaUrls.push(
+          `https://ujsgjkwpigmmnmyfdgnb.supabase.co/storage/v1/object/public/${mediaData.Key}`
+        );
       }
 
       const featuredImage = await supabaseClient.storage
@@ -147,7 +149,7 @@ export default function GameNew(props) {
       const { data: updatedGame } = await supabaseClient
         .from('game')
         .update({
-          featured_image: featuredImage.data.Key,
+          featured_image: `https://ujsgjkwpigmmnmyfdgnb.supabase.co/storage/v1/object/public/${featuredImage.data.Key}`,
           media: mediaUrls,
         })
         .match({ uuid: game.uuid })
