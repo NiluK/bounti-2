@@ -18,6 +18,7 @@ import {
   Text,
   Space,
   Avatar,
+  Button,
   Badge,
   Image,
   Tabs,
@@ -87,7 +88,7 @@ const fetchDeveloper = async (developerId) => {
   return developer;
 };
 
-export default function CaseStudy(props) {
+export default function Bounti(props) {
   const { theme } = useTheme();
   const { classes } = useStyles();
 
@@ -109,8 +110,6 @@ export default function CaseStudy(props) {
 
   const type = bounti.bounti_type;
 
-  console.log(game);
-
   return (
     <>
       <TitleAndMetaTags title={`${bounti.title}`} image={bounti.featured_image} />
@@ -127,7 +126,9 @@ export default function CaseStudy(props) {
             <Title order={3} my="md">
               Summary
             </Title>
-            <Paper p="sm">{bounti.subtitle}</Paper>
+            <Paper p="sm">
+              <Text>{bounti.subtitle}</Text>
+            </Paper>
             <Title order={3} my="md">
               Instructions
             </Title>
@@ -140,7 +141,7 @@ export default function CaseStudy(props) {
               </TypographyStylesProvider>
             </Paper>
             <Title order={3} my="md">
-              Submissions {bounti.submissions_count}
+              Entries {bounti.submissions_count}
             </Title>
           </Grid.Col>
           <Grid.Col
@@ -153,12 +154,23 @@ export default function CaseStudy(props) {
             sm={1}
           >
             <Paper shadow="xs" radius="md" p="sm" withBorder>
-              <Text size={'lg'}>
-                More from
-                <Link href={`/developer/${developer?.name}`}>
-                  <a className={classes.link}>{developer?.name}</a>
-                </Link>
-              </Text>
+              <Title align="center" order={3}>
+                Reward Pool
+              </Title>
+
+              <Title my="xl" align="center" order={1}>
+                {bounti.reward_value} AUD
+              </Title>
+              <Text>{bounti.reward_distribution}</Text>
+              <Button
+                fullWidth
+                my="lg"
+                type="submit"
+                size={'md'}
+                // loading={loading}
+              >
+                Join Bounti
+              </Button>
               <Text>{developer?.description}</Text>
               {developer.developer_game?.map(({ game }) => (
                 <Box>
@@ -204,8 +216,6 @@ export async function getServerSideProps(ctx) {
     )
     .eq('slug', ctx.params.slug)
     .single();
-
-  console.log('bounti', bounti);
 
   const { data: developer = {} } = await supabaseServerClient(ctx)
     .from('developer')

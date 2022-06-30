@@ -4,7 +4,7 @@ import { ArrowLeftIcon, ArrowRightIcon } from '@radix-ui/react-icons';
 import { useComposedRefs } from '@radix-ui/react-compose-refs';
 
 import ReactPlayer from 'react-player';
-
+import Link from 'next/link';
 import { Image, Container, Box, Button, Grid, Text } from '@mantine/core';
 import GameCarousel from './GameCarousel';
 const Rp = styled(ReactPlayer);
@@ -30,9 +30,13 @@ export const GameHero = ({ game }) => {
           <Text my="sm" size="sm">
             {game.summary}
           </Text>
-          <Button my="lg" fullWidth>
-            View website
-          </Button>
+          {game.website && (
+            <Link href={game.website} passHref>
+              <Button my="lg" fullWidth>
+                View website
+              </Button>
+            </Link>
+          )}
         </Box>
       </Grid.Col>
       <Grid.Col xs={3} sm={2}>
