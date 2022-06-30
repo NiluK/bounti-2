@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import NextLink from 'next/link';
 import { TitleAndMetaTags } from '@components/TitleAndMetaTags';
 import { GameHero } from '@components/games/GameHero';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/router';
 import HorizontalCard from 'components/HorizontalCard';
@@ -24,6 +25,8 @@ import {
   Tabs,
 } from '@mantine/core';
 import Link from 'next/link';
+import { faHourglass, faTrophy } from '@fortawesome/free-solid-svg-icons';
+import formatDistance from 'date-fns/formatDistance';
 
 const useStyles = createStyles((theme) => ({
   description: {
@@ -128,6 +131,51 @@ export default function Bounti(props) {
             </Title>
             <Paper p="sm">
               <Text>{bounti.subtitle}</Text>
+
+              <Grid columns={8} my="lg">
+                <Grid.Col span={1}>
+                  <Title order={5}>Type</Title>
+                  {type?.map(({ type }) => (
+                    <Badge my="sm" key={type.name}>
+                      {type.name}
+                    </Badge>
+                  ))}
+                </Grid.Col>
+                <Grid.Col span={1}>
+                  <Title order={5}>Rewards</Title>
+                  <Text my="xs">
+                    <Text component="span" ml="sm" color="yellow">
+                      <FontAwesomeIcon icon={faTrophy} />
+                    </Text>
+                    <Text component="span" ml="sm">
+                      {bounti.reward_number}
+                    </Text>
+                  </Text>
+                </Grid.Col>
+                <Grid.Col span={3}>
+                  <Title order={5}>Deadline</Title>
+                  <Text my="xs">
+                    <Text component="span" ml="sm" color="teal">
+                      <FontAwesomeIcon icon={faHourglass} />
+                    </Text>
+                    <Text component="span" ml="sm">
+                      {formatDistance(new Date(bounti.reward_deadline), new Date(), {
+                        includeSeconds: true,
+                        addSuffix: true,
+                      })}
+                    </Text>
+                  </Text>
+                </Grid.Col>
+                <Grid.Col span={1}>
+                  <Title order={5}>Build</Title>
+                  <Text my="xs">{bounti.build}</Text>
+                </Grid.Col>
+              </Grid>
+              <Title order={5} my="sm">
+                Reward Distributon
+              </Title>
+
+              <Text>{bounti.reward_distribution}</Text>
             </Paper>
             <Title order={3} my="md">
               Instructions
@@ -159,9 +207,18 @@ export default function Bounti(props) {
               </Title>
 
               <Title my="xl" align="center" order={1}>
-                {bounti.reward_value} AUD
+                <Text size={100} color="yellow">
+                  {bounti.reward_value} AUD
+                </Text>
               </Title>
-              <Text>{bounti.reward_distribution}</Text>
+
+              <Title align="center" order={4}>
+                Submissions
+              </Title>
+
+              <Title my="sm" align="center" order={3}>
+                25 / {bounti.max_submissions}
+              </Title>
               <Button
                 fullWidth
                 my="lg"
@@ -169,37 +226,8 @@ export default function Bounti(props) {
                 size={'md'}
                 // loading={loading}
               >
-                Join Bounti
+                Submit
               </Button>
-              <Text>{developer?.description}</Text>
-              {developer.developer_game?.map(({ game }) => (
-                <Box>
-                  <NextLink href="/games/[slug]" as={`/bounties/${bounti?.slug}`}>
-                    <a className={classes.linkActive}>
-                      <Paper my="lg" shadow="xs" radius="md" p="sm" withBorder>
-                        <Image
-                          fit="contain"
-                          sx={(theme) => ({
-                            objectFit: 'cover',
-                            [theme.fn.smallerThan('sm')]: {
-                              width: '200px',
-                            },
-                            width: '300px',
-                            objectPosition: 'top center',
-                            height: '100%',
-                            aspectRatio: '16 / 9',
-                            p: 'sm',
-                            borderRadius: '5px',
-                            paddingBottom: '2px',
-                          })}
-                          src={game?.featured_image}
-                        />
-                        <Text size="sm">{bounti?.name}</Text>
-                      </Paper>
-                    </a>
-                  </NextLink>
-                </Box>
-              ))}
             </Paper>
           </Grid.Col>
         </Grid>

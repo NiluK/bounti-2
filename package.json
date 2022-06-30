@@ -69,7 +69,7 @@
     "codesandbox": "^2.2.3",
     "cookies-next": "^2.0.4",
     "copy-to-clipboard": "^3.3.1",
-    "date-fns": "^2.20.0",
+    "date-fns": "^2.28.0",
     "dayjs": "^1.11.3",
     "glob": "^7.1.6",
     "gray-matter": "^4.0.2",

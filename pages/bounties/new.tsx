@@ -87,6 +87,7 @@ export default function BountiNew(props) {
           instructions: data.instructions,
           non_monetary_rewards: data.non_monetary_rewards,
           reward_distribution: data.reward_distribution,
+          reward_deadline: data.reward_deadline,
           reward_number: data.reward_number,
           reward_value: data.reward_value,
           file: data.file,

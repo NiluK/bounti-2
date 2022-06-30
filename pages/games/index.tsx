@@ -49,35 +49,15 @@ export default function Dashboard({ games }) {
   );
 }
 
-export const getServerSideProps = withPageAuth({
-  redirectTo: '/login',
-  async getServerSideProps(ctx) {
-    const supabase = supabaseServerClient(ctx);
-    let user;
-    try {
-      user = await getUser(ctx);
-    } catch (e) {
-      console.error(e);
-      user = null;
-    }
+export async function getServerSideProps(ctx) {
+  const supabase = supabaseServerClient(ctx);
 
-    if (!user.user) {
-      return {
-        props: {
-          redirect: {
-            pathname: '/login',
-          },
-        },
-      };
-    }
+  const { data } = await supabase.from('game').select('*');
 
-    const { data } = await supabase.from('game').select('*');
-
-    const games = data;
-    return {
-      props: {
-        games,
-      },
-    };
-  },
-});
+  const games = data;
+  return {
+    props: {
+      games,
+    },
+  };
+}
