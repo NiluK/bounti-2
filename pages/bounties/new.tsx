@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import React, { useState, useEffect } from 'react';
 import { TitleAndMetaTags } from '@components/TitleAndMetaTags';
 import { useTheme } from 'next-themes';
