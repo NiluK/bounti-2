@@ -200,10 +200,12 @@ export async function getServerSideProps(ctx) {
   const { data: bounti = {} } = await supabaseServerClient(ctx)
     .from('bounti')
     .select(
-      '*, bounti_developer(developer(*)), bounti_type(type(*)), bounti_platform(platform(*)), bounti_game(game(*), bounti_submission(submission(*)))'
+      '*, bounti_developer(developer(*)), bounti_type(type(*)), bounti_platform(platform(*)), bounti_game(game(*)), bounti_submission(submission(*)))'
     )
     .eq('slug', ctx.params.slug)
     .single();
+
+  console.log('bounti', bounti);
 
   const { data: developer = {} } = await supabaseServerClient(ctx)
     .from('developer')
