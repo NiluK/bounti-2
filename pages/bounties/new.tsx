@@ -70,7 +70,7 @@ export default function BountiNew(props) {
   const user = useUser();
   const router = useRouter();
 
-  const { register, handleSubmit, watch, control } = useForm();
+  const { register, handleSubmit, control } = useForm();
 
   const onSubmit = async (data) => {
     try {
@@ -94,8 +94,14 @@ export default function BountiNew(props) {
 
       console.log('bounti', bounti);
 
-      const { data: type_bounti } = await supabaseClient
-        .from('type_bounti')
+      const featuredImage = await supabaseClient.storage
+        .from('bounti')
+        .upload(`${bounti.uuid}/featured-image/${data.featuredImage.path}`, data.featuredImage, {
+          upsert: true,
+        });
+
+      const { data: bounti_type } = await supabaseClient
+        .from('bounti_type')
         .insert({
           type_uuid: data.type,
           bounti_uuid: bounti.uuid,
@@ -103,7 +109,7 @@ export default function BountiNew(props) {
         .single();
 
       const { data: game } = await supabaseClient
-        .from('game_bounti')
+        .from('bounti_game')
         .insert({
           game_uuid: data.game,
           bounti_uuid: bounti.uuid,
@@ -111,8 +117,8 @@ export default function BountiNew(props) {
         .single();
 
       for (const platform in data.platform) {
-        const { data: platform_game } = await supabaseClient
-          .from('platform_bounti')
+        const { data: game_platform } = await supabaseClient
+          .from('bounti_platform')
           .insert({
             platform_uuid: data.platform[platform],
             bounti_uuid: bounti.uuid,
@@ -121,7 +127,7 @@ export default function BountiNew(props) {
       }
 
       const { data: updatedDeveloper } = await supabaseClient
-        .from('developer_bounti')
+        .from('bounti_developer')
         .insert({
           developer_uuid: developer.uuid,
           bounti_uuid: bounti.uuid,
@@ -129,9 +135,17 @@ export default function BountiNew(props) {
         .match({ uuid: developer })
         .single();
 
+      const { data: updatedBounti } = await supabaseClient
+        .from('game')
+        .update({
+          featured_image: `https://ujsgjkwpigmmnmyfdgnb.supabase.co/storage/v1/object/public/${featuredImage.data.Key}`,
+        })
+        .match({ uuid: bounti.uuid })
+        .single();
+
       setLoading(false);
 
-      router.push(`/bounties/${bounti.slug}`);
+      router.push(`/bounties/${updatedBounti.slug}`);
     } catch (error) {
       console.log(error);
       setLoading(false);
@@ -169,6 +183,8 @@ export default function BountiNew(props) {
         };
       })
     : [];
+  const [typeSetData, setTypeSetData] = useState(typeData);
+
   const platformData = Array.isArray(platform)
     ? platform.map((platform) => {
         return {
@@ -210,21 +226,30 @@ export default function BountiNew(props) {
               placeholder=""
               {...register('subtitle')}
             />
-
+            <Controller
+              name="featuredImage"
+              control={control}
+              render={({ field }) => (
+                <DropZone title={'Featured Image'} multiple={false} required {...field} />
+              )}
+            />
             <Controller
               name="type"
               control={control}
               render={({ field }) => (
                 <Select
                   my={'sm'}
-                  data={typeData}
+                  data={typeSetData}
                   searchable
                   label="Bounti Type"
                   placeholder="QA, Marketing, etc."
                   clearButtonLabel="Clear selection"
                   clearable
                   multiple
+                  getCreateLabel={(query) => `+ Create ${query}`}
+                  creatable
                   required
+                  onCreate={(query) => setTypeSetData((current) => [...current, query])}
                   {...field}
                 />
               )}

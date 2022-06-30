@@ -64,7 +64,7 @@ const fetchGame = async () => {
   const { slug } = router.query;
   const { data: game = {} } = await supabaseClient
     .from('game')
-    .select('*, developer_game(developer(*)), genre_game(genre(*))')
+    .select('*, developer_game(developer(*)), game_genre(genre(*))')
     .eq('slug', slug)
     .single();
   return game;
@@ -99,9 +99,9 @@ export default function CaseStudy(props) {
     }
   }, [game, developer]);
 
-  const genre = game?.genre_game;
-  const feature = game?.genre_game;
-  const platform = game?.genre_game;
+  const genre = game?.game_genre;
+  const feature = game?.game_genre;
+  const platform = game?.game_genre;
 
   return (
     <>
@@ -185,7 +185,7 @@ export default function CaseStudy(props) {
 export async function getServerSideProps(ctx) {
   const { data: game = {} } = await supabaseServerClient(ctx)
     .from('game')
-    .select('*, developer_game(developer(*)), genre_game(genre(*)), platform_game(platform(*))')
+    .select('*, developer_game(developer(*)), game_genre(genre(*)), game_platform(platform(*))')
     .eq('slug', ctx.params.slug)
     .single();
 

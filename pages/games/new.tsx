@@ -89,8 +89,8 @@ export default function GameNew(props) {
         .single();
 
       for (const genre in data.genre) {
-        const { data: genre_game } = await supabaseClient
-          .from('genre_game')
+        const { data: game_genre } = await supabaseClient
+          .from('game_genre')
           .insert({
             genre_uuid: data.genre[genre],
             game_uuid: game.uuid,
@@ -109,8 +109,8 @@ export default function GameNew(props) {
       }
 
       for (const platform in data.platform) {
-        const { data: platform_game } = await supabaseClient
-          .from('platform_game')
+        const { data: game_platform } = await supabaseClient
+          .from('game_platform')
           .insert({
             platform_uuid: data.platform[platform],
             game_uuid: game.uuid,

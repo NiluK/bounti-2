@@ -137,12 +137,12 @@ export const getServerSideProps = withPageAuth({
 
     const { data } = await supabase
       .from('developer')
-      .select('*, developer_game(game(*)), developer_bounti(bounti(*))')
+      .select('*, developer_game(game(*)), bounti_developer(bounti(*))')
       .eq('profile_owner', user.user.id)
       .single();
 
     const games = data.developer_game;
-    const bounties = data.developer_bounti;
+    const bounties = data.bounti_developer;
 
     return {
       props: {

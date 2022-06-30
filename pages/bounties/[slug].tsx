@@ -17,6 +17,7 @@ import {
   TypographyStylesProvider,
   Text,
   Space,
+  Avatar,
   Badge,
   Image,
   Tabs,
@@ -68,7 +69,7 @@ const fetchBounti = async () => {
   const { data: bounti = {} } = await supabaseClient
     .from('bounti')
     .select(
-      '*, developer_bounti(developer(*)), type_bounti(type(*)), platform_bounti(platform(*)), game_bounti(game(*))'
+      '*, bounti_developer(developer(*)), bounti_type(type(*)), bounti_platform(platform(*)), bounti_game(game(*))'
     )
     .eq('slug', slug)
     .single();
@@ -93,7 +94,7 @@ export default function CaseStudy(props) {
   const [bounti, setBounti] = useState(props.bounti);
   const [developer, setDeveloper] = useState(props.developer);
 
-  const game = bounti.game_bounti[0].game;
+  const game = bounti.bounti_game[0].game;
 
   useEffect(() => {
     if (!bounti) {
@@ -101,38 +102,36 @@ export default function CaseStudy(props) {
       setBounti(bounti);
     }
     if (!developer) {
-      const developer = fetchDeveloper(bounti.developer_bounti[0].developer.uuid);
+      const developer = fetchDeveloper(bounti.bounti_developer[0].developer.uuid);
       setDeveloper(developer);
     }
   }, [bounti, developer]);
 
-  const type = bounti.type_bounti;
+  const type = bounti.bounti_type;
 
   console.log(game);
 
   return (
     <>
-      <TitleAndMetaTags
-        title={`${bounti.name} – Case studies – Radix UI`}
-        image={`https://ujsgjkwpigmmnmyfdgnb.supabase.co/storage/v1/object/public/${game.featured_image}`}
-      />
+      <TitleAndMetaTags title={`${bounti.title}`} image={bounti.featured_image} />
       <Container size={'lg'} my="lg">
-        <Title my={'lg'} order={2}>
-          {bounti.title}
-        </Title>
+        <Title order={2}>{bounti.title}</Title>
         {type?.map(({ type }) => (
-          <Badge key={type.name} my={'sm'}>
+          <Badge key={type.name} my={'lg'}>
             {type.name}
           </Badge>
         ))}
         <Grid columns={3}>
           <Grid.Col xs={3} sm={2}>
             <HorizontalCard game={game} />
-            <Paper my="lg" shadow="xs" radius="md" p="sm" withBorder>
-              <Title order={2} mb="sm">
-                Instructions
-              </Title>
-
+            <Title order={3} my="md">
+              Summary
+            </Title>
+            <Paper p="sm">{bounti.subtitle}</Paper>
+            <Title order={3} my="md">
+              Instructions
+            </Title>
+            <Paper shadow="xs" radius="md" p="sm" withBorder>
               <TypographyStylesProvider>
                 <div
                   dangerouslySetInnerHTML={{ __html: bounti?.instructions }}
@@ -140,9 +139,20 @@ export default function CaseStudy(props) {
                 />
               </TypographyStylesProvider>
             </Paper>
+            <Title order={3} my="md">
+              Submissions {bounti.submissions_count}
+            </Title>
           </Grid.Col>
-          <Grid.Col xs={3} sm={1}>
-            <Paper my="lg" shadow="xs" radius="md" p="sm" withBorder>
+          <Grid.Col
+            sx={{
+              position: 'sticky',
+              top: 0,
+              zIndex: 1,
+            }}
+            xs={3}
+            sm={1}
+          >
+            <Paper shadow="xs" radius="md" p="sm" withBorder>
               <Text size={'lg'}>
                 More from
                 <Link href={`/developer/${developer?.name}`}>
@@ -190,15 +200,15 @@ export async function getServerSideProps(ctx) {
   const { data: bounti = {} } = await supabaseServerClient(ctx)
     .from('bounti')
     .select(
-      '*, developer_bounti(developer(*)), type_bounti(type(*)), platform_bounti(platform(*)), game_bounti(game(*))'
+      '*, bounti_developer(developer(*)), bounti_type(type(*)), bounti_platform(platform(*)), bounti_game(game(*), bounti_submission(submission(*)))'
     )
     .eq('slug', ctx.params.slug)
     .single();
 
   const { data: developer = {} } = await supabaseServerClient(ctx)
     .from('developer')
-    .select('*, developer_bounti(bounti(*))')
-    .eq('uuid', bounti.developer_bounti[0].developer.uuid)
+    .select('*, bounti_developer(bounti(*))')
+    .eq('uuid', bounti.bounti_developer[0].developer.uuid)
     .single();
 
   return {
