@@ -6,16 +6,10 @@ const readingTime = require('reading-time');
 const withPlugins = require('next-compose-plugins');
 const withVideos = require('next-videos');
 const withOptimizedImages = require('next-optimized-images');
-const withMDX = require('@next/mdx')({
-  options: {
-    remarkPlugins: [],
-    rehypePlugins: [],
-  },
-});
 
 const withTM = require('next-transpile-modules')(['@modulz/design-system']);
 
-module.exports = withPlugins([withTM, withOptimizedImages, withVideos, withMDX], {
+module.exports = withPlugins([withTM, withOptimizedImages, withVideos], {
   // Next.js config
   // Generate URL rewrites for components and utilities
   // So navigating to /tooltip rewrites to /tooltip/[latestVersion]
