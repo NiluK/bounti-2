@@ -31,7 +31,6 @@ import { useBooleanToggle } from '@mantine/hooks';
 import ColorSwitch from './ColorSwitch';
 import Link from 'next/link';
 import { useUser } from '@supabase/auth-helpers-react';
-import { ProfileContext } from 'context/profile';
 import {
   fetchProfile,
   fetchProfileType,
