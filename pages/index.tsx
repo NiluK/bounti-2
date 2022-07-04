@@ -1,12 +1,26 @@
-import React from 'react';
-// import { Box, Container, Separator } from '@modulz/design-system';
+import React, { useState, useEffect, useContext } from 'react';
 import { TitleAndMetaTags } from '@components/TitleAndMetaTags';
 import { MainHero } from '@components/marketing/MainHero';
 import { BenefitsSection } from '@components/marketing/BenefitsSection';
 import { getUser, supabaseClient, supabaseServerClient } from '@supabase/auth-helpers-nextjs';
-import { Container, createStyles, Divider, Paper } from '@mantine/core';
-import { Separator } from '@modulz/design-system';
-export default function PrimitivesHome({ games }) {
+import { Container } from '@mantine/core';
+
+const fetchGames = async () => {
+  const { data, error } = await supabaseClient.from('game').select('*');
+  return data;
+};
+
+export default function Home(props) {
+  console.log(props);
+  const [games, setGames] = useState(props.games || []);
+
+  useEffect(() => {
+    if (!games.length) {
+      const fetchedGame = fetchGames();
+      setGames(fetchedGame);
+    }
+  }, [games]);
+
   return (
     <Container>
       <TitleAndMetaTags
@@ -22,10 +36,18 @@ export default function PrimitivesHome({ games }) {
 
 export async function getServerSideProps(ctx) {
   const { data, error } = await supabaseServerClient(ctx).from('game').select('*');
-  console.log(data);
+  console.log(error);
+  let user = null;
+  try {
+    user = await getUser(ctx);
+  } catch (error) {
+    console.log(error);
+  }
+
   return {
     props: {
       games: data,
+      user: user.user,
     },
   };
 }

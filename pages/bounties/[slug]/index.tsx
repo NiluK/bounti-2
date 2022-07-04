@@ -14,15 +14,10 @@ import {
   Container,
   createStyles,
   Title,
-  Box,
   TypographyStylesProvider,
   Text,
-  Space,
-  Avatar,
   Button,
   Badge,
-  Image,
-  Tabs,
 } from '@mantine/core';
 import Link from 'next/link';
 import { faHourglass, faTrophy } from '@fortawesome/free-solid-svg-icons';
@@ -73,7 +68,7 @@ const fetchBounti = async () => {
   const { data: bounti = {} } = await supabaseClient
     .from('bounti')
     .select(
-      '*, bounti_developer(developer(*)), bounti_type(type(*)), bounti_platform(platform(*)), bounti_game(game(*))'
+      '*, bounti_developer(developer(*)), bounti_category(category(*)), bounti_platform(platform(*)), bounti_game(game(*))'
     )
     .eq('slug', slug)
     .single();
@@ -94,6 +89,8 @@ const fetchDeveloper = async (developerId) => {
 export default function Bounti(props) {
   const { theme } = useTheme();
   const { classes } = useStyles();
+  const router = useRouter();
+  const { slug } = router.query;
 
   const [bounti, setBounti] = useState(props.bounti);
   const [developer, setDeveloper] = useState(props.developer);
@@ -111,16 +108,16 @@ export default function Bounti(props) {
     }
   }, [bounti, developer]);
 
-  const type = bounti.bounti_type;
+  const category = bounti.bounti_category;
 
   return (
     <>
       <TitleAndMetaTags title={`${bounti.title}`} image={bounti.featured_image} />
       <Container size={'lg'} my="lg">
         <Title order={2}>{bounti.title}</Title>
-        {type?.map(({ type }) => (
-          <Badge key={type.name} my={'lg'}>
-            {type.name}
+        {category?.map(({ category }) => (
+          <Badge key={category.name} my={'lg'}>
+            {category.name}
           </Badge>
         ))}
         <Grid columns={3}>
@@ -134,10 +131,10 @@ export default function Bounti(props) {
 
               <Grid columns={8} my="lg">
                 <Grid.Col span={1}>
-                  <Title order={5}>Type</Title>
-                  {type?.map(({ type }) => (
-                    <Badge my="sm" key={type.name}>
-                      {type.name}
+                  <Title order={5}>Category</Title>
+                  {category?.map(({ category }) => (
+                    <Badge my="sm" key={category.name}>
+                      {category.name}
                     </Badge>
                   ))}
                 </Grid.Col>
@@ -219,15 +216,17 @@ export default function Bounti(props) {
               <Title my="sm" align="center" order={3}>
                 25 / {bounti.max_submissions}
               </Title>
-              <Button
-                fullWidth
-                my="lg"
-                type="submit"
-                size={'md'}
-                // loading={loading}
-              >
-                Submit
-              </Button>
+              <Link href={`/bounties/${slug}/submissions/new`}>
+                <Button
+                  fullWidth
+                  my="lg"
+                  type="submit"
+                  size={'md'}
+                  // loading={loading}
+                >
+                  Submit
+                </Button>
+              </Link>
             </Paper>
           </Grid.Col>
         </Grid>
@@ -240,7 +239,7 @@ export async function getServerSideProps(ctx) {
   const { data: bounti = {} } = await supabaseServerClient(ctx)
     .from('bounti')
     .select(
-      '*, bounti_developer(developer(*)), bounti_type(type(*)), bounti_platform(platform(*)), bounti_game(game(*)), bounti_submission(submission(*)))'
+      '*, bounti_developer(developer(*)), bounti_category(category(*)), bounti_platform(platform(*)), bounti_game(game(*)), bounti_submission(submission(*)))'
     )
     .eq('slug', ctx.params.slug)
     .single();

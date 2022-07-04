@@ -39,7 +39,7 @@ const getDeveloper = async (user) => {
   const { data } = await supabaseClient
     .from('developer')
     .select('*, developer_game(game(*))')
-    .eq('profile_owner', user.id)
+    .eq('user_uuid', user.id)
     .single();
 
   return data;
@@ -366,7 +366,7 @@ export const getServerSideProps = withPageAuth({
     const { data: developer } = await supabaseServerClient(ctx)
       .from('developer')
       .select('*, developer_game(game(*))')
-      .eq('profile_owner', user.user.id)
+      .eq('user_uuid', user.user.id)
       .single();
 
     const { data: genre } = await supabaseServerClient(ctx).from('genre').select('*');

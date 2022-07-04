@@ -1,19 +1,17 @@
 import React, { useState } from 'react';
 import { AppProps } from 'next/app';
-import { useRouter } from 'next/router';
-import { ThemeProvider } from 'next-themes';
 import { GetServerSidePropsContext } from 'next';
-import { globalCss, darkTheme, DesignSystemProvider, Box } from '@modulz/design-system';
-import { Header } from '@components/Header';
-import { useAnalytics } from '@lib/analytics';
+import { Header } from 'components/Header';
+import { useAnalytics } from 'lib/analytics';
 import NextNProgress from 'nextjs-progressbar';
-import { ProfileProvider } from 'context/profile';
 import { UserProvider } from '@supabase/auth-helpers-react';
 import { supabaseClient } from '@supabase/auth-helpers-nextjs';
 import { MantineProvider, ColorScheme, ColorSchemeProvider, AppShell } from '@mantine/core';
 import { NotificationsProvider } from '@mantine/notifications';
 import { useColorScheme } from '@mantine/hooks';
 import { getCookie, setCookies } from 'cookies-next';
+import { Provider } from 'react-redux';
+import store from 'store/index';
 
 function App(props: AppProps & { colorScheme: ColorScheme }) {
   const { Component, pageProps } = props;
@@ -38,9 +36,9 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
       >
         <NotificationsProvider>
           <UserProvider supabaseClient={supabaseClient}>
-            <ProfileProvider>
+            <Provider store={store}>
               <AppShell
-                header={<Header />}
+                header={<Header {...pageProps} />}
                 styles={(theme) => ({
                   main: {
                     minHeight: '100vh',
@@ -52,7 +50,7 @@ function App(props: AppProps & { colorScheme: ColorScheme }) {
                 <NextNProgress color="#F76809" />
                 <Component {...pageProps} />
               </AppShell>
-            </ProfileProvider>
+            </Provider>
           </UserProvider>
         </NotificationsProvider>
       </MantineProvider>

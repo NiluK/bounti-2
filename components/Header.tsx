@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
   createStyles,
   Header as Nav,
@@ -32,6 +32,14 @@ import ColorSwitch from './ColorSwitch';
 import Link from 'next/link';
 import { useUser } from '@supabase/auth-helpers-react';
 import { ProfileContext } from 'context/profile';
+import {
+  fetchProfile,
+  fetchProfileType,
+  getProfileType,
+  setProfileType,
+} from 'store/profile/profileSlice';
+import { AnyAction } from '@reduxjs/toolkit';
+import { Provider, useSelector, useDispatch } from 'react-redux';
 
 const HEADER_HEIGHT = 60;
 
@@ -156,13 +164,28 @@ const loggedOutlinks = [
   { link: '/login', label: 'Login' },
 ];
 
-export function Header() {
+export function Header(props) {
   const [opened, toggleOpened] = useBooleanToggle(false);
   const { classes, cx, theme } = useStyles();
-  const { user } = useUser();
-  const { profileType, setProfileType } = useContext(ProfileContext);
+
+  const user = props.user || useUser().user;
+
+  console.log(user);
+
+  const dispatch = useDispatch();
+  const profileType = useSelector(getProfileType);
+
+  useEffect(() => {
+    dispatch(fetchProfileType({ user }) as unknown as AnyAction);
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    dispatch(fetchProfile({ user, profile: profileType }) as unknown as AnyAction);
+  }, [profileType, dispatch]);
 
   const [userMenuOpened, setUserMenuOpened] = useState(false);
+
+  console.log('profileType', profileType);
 
   const items = links.map((link) => (
     <Link key={link.label} href={link.link}>
@@ -225,7 +248,14 @@ export function Header() {
               <Menu.Item icon={<Settings size={14} />}>Account settings</Menu.Item>
               <Menu.Item
                 icon={<SwitchHorizontal size={14} />}
-                onClick={() => setProfileType(profileType === 'player' ? 'developer' : 'player')}
+                onClick={() =>
+                  dispatch(
+                    setProfileType({
+                      type: profileType === 'player' ? 'developer' : 'player',
+                      user,
+                    }) as unknown as AnyAction
+                  )
+                }
               >
                 Switch to {profileType === 'player' ? 'Developer' : 'Player'} Profile
               </Menu.Item>

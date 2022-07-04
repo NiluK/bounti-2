@@ -21,18 +21,23 @@ import {
   Title,
   Modal,
   Checkbox,
+  createStyles,
   MultiSelect,
   Select,
+  Grid,
 } from '@mantine/core';
 import DropZone from '@components/Dropzone';
 import Link from 'next/link';
 import RichTextEditor from '@components/RichText';
+import { Widget } from '@typeform/embed-react';
 
 import { useForm, useController, Controller } from 'react-hook-form';
 import { camelCase } from 'lodash';
 import { useUser } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 import { IMAGE_MIME_TYPE, MIME_TYPES } from '@mantine/dropzone';
+import { Database, Video } from 'tabler-icons-react';
+import { TypographyStylesProvider } from '@mantine/core';
 
 const getData = async (table) => {
   const { data } = await supabaseClient.from(table).select('*');
@@ -63,14 +68,55 @@ const handleImageUpload = (file: File): Promise<string> =>
       .catch(() => reject(new Error('Upload failed')));
   });
 
+const useStyles = createStyles((theme) => ({
+  description: {
+    textDecoration: 'none',
+
+    img: {
+      width: '100%',
+    },
+
+    [theme.fn.smallerThan('sm')]: {
+      borderRadius: 0,
+      padding: theme.spacing.md,
+    },
+  },
+
+  userMenu: {
+    [theme.fn.smallerThan('xs')]: {
+      display: 'none',
+    },
+  },
+
+  link: {
+    color: theme.colorScheme === 'dark' ? theme.colors.gray[4] : theme.colors.gray[8],
+    textDecoration: 'none',
+    fontWeight: 'bold',
+    marginLeft: '5px',
+  },
+
+  linkActive: {
+    textDecoration: 'none',
+    '&, &:hover': {
+      backgroundColor:
+        theme.colorScheme === 'dark'
+          ? theme.fn.rgba(theme.colors[theme.primaryColor][9], 0.25)
+          : theme.colors[theme.primaryColor][0],
+      color: theme.colors[theme.primaryColor][theme.colorScheme === 'dark' ? 3 : 7],
+    },
+  },
+}));
+
 export default function BountiNew(props) {
   const [category, setCategory] = useState(props.category);
   const [platform, setPlatform] = useState(props.platform);
   const [feature, setFeature] = useState(props.feature);
   const [developer, setDeveloper] = useState(props.developer);
+  const [bounti, setBounti] = useState(props.bounti);
   const [loading, setLoading] = useState(false);
   const user = useUser();
   const router = useRouter();
+  const { classes } = useStyles();
 
   const { register, handleSubmit, control } = useForm();
 
@@ -104,7 +150,7 @@ export default function BountiNew(props) {
         });
 
       const { data: bounti_category } = await supabaseClient
-        .from('bounti_category')
+        .from('bounti_categoty')
         .insert({
           category_uuid: data.category,
           bounti_uuid: bounti.uuid,
@@ -139,7 +185,7 @@ export default function BountiNew(props) {
         .single();
 
       const { data: updatedBounti } = await supabaseClient
-        .from('bounti')
+        .from('game')
         .update({
           featured_image: `https://ujsgjkwpigmmnmyfdgnb.supabase.co/storage/v1/object/public/${featuredImage.data.Key}`,
         })
@@ -162,7 +208,7 @@ export default function BountiNew(props) {
   useEffect(() => {
     if (!category.length) {
       const category = getData('category');
-      setCategory(category);
+      category(category);
     }
     if (!platform.length) {
       const platform = getData('platform');
@@ -216,168 +262,81 @@ export default function BountiNew(props) {
 
   return (
     <>
-      <TitleAndMetaTags title={`Create new bounti`} />
-      <Container my={20} size={'sm'}>
-        <Paper p={20} withBorder shadow={'xs'}>
-          <Title order={2}>Create New Bounti</Title>
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <TextInput my="sm" required label="Bounti Name" placeholder="" {...register('title')} />
-            <Textarea
-              my="sm"
-              required
-              label="Bounti Description"
-              placeholder=""
-              {...register('subtitle')}
-            />
-            <Controller
-              name="featuredImage"
-              control={control}
-              render={({ field }) => (
-                <DropZone title={'Featured Image'} multiple={false} required {...field} />
-              )}
-            />
-            <Controller
-              name="category"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  my={'sm'}
-                  data={categorySetData}
-                  searchable
-                  label="Bounti Category"
-                  placeholder="QA, Marketing, etc."
-                  clearButtonLabel="Clear selection"
-                  clearable
-                  multiple
-                  getCreateLabel={(query) => `+ Create ${query}`}
-                  creatable
+      <TitleAndMetaTags title={`Create new Submission`} />
+      <Container my={20} size={'xl'}>
+        <Grid columns={2}>
+          <Grid.Col span={1}>
+            <Title order={3} my="md">
+              Instructions
+            </Title>
+            <Paper shadow="xs" radius="md" p="sm" withBorder>
+              <TypographyStylesProvider>
+                <div
+                  dangerouslySetInnerHTML={{ __html: bounti?.instructions }}
+                  className={classes.description}
+                />
+              </TypographyStylesProvider>
+            </Paper>
+          </Grid.Col>
+          <Grid.Col span={1}>
+            <Widget id="KWFZ7r4x" height={800} />
+            {/* <Paper p={20} withBorder shadow={'xs'} my="xl">
+              <Title order={2}>Create New Submission</Title>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <Textarea
+                  my="sm"
                   required
-                  onCreate={(query) => setCategorySetData((current) => [...current, query])}
-                  {...field}
+                  label="Submission Text"
+                  placeholder=""
+                  {...register('subtitle')}
                 />
-              )}
-            />
 
-            <TextInput
-              my="sm"
-              required
-              type="number"
-              label="Build Version"
-              placeholder=""
-              {...register('build')}
-              step={0.01}
-              min={0}
-            />
-
-            <TextInput my="sm" required label="File Link" placeholder="" {...register('file')} />
-
-            <Controller
-              name="game"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  my={'sm'}
-                  data={gamesData}
-                  searchable
-                  label="Associated Game"
-                  placeholder="Adventure, action, etc."
-                  clearButtonLabel="Clear selection"
-                  clearable
-                  multiple
-                  required
-                  {...field}
+                <Controller
+                  name="video"
+                  control={control}
+                  render={({ field }) => (
+                    <Button leftIcon={<Video />} my="sm">
+                      Upload Submission Video
+                    </Button>
+                  )}
                 />
-              )}
-            />
 
-            <TextInput
-              type="number"
-              my="sm"
-              required
-              label="Bounti Reward (AUD)"
-              min={0}
-              placeholder=""
-              {...register('reward_value')}
-            />
-
-            <TextInput
-              type="number"
-              my="sm"
-              min={1}
-              required
-              label="Total Number of Prizes"
-              placeholder=""
-              {...register('reward_number')}
-            />
-
-            <Textarea
-              my="sm"
-              label="How will rewards be distributed?"
-              required
-              placeholder=""
-              {...register('reward_distribution')}
-            />
-
-            <Textarea
-              my="sm"
-              label="Non Monetary Rewards"
-              placeholder=""
-              {...register('non_monetary_rewards')}
-            />
-
-            <Controller
-              name="platform"
-              control={control}
-              render={({ field }) => (
-                <MultiSelect
-                  my={'sm'}
-                  data={platformData}
-                  label="Supported Platforms"
-                  placeholder="Playstation, Xbox, etc."
-                  clearButtonLabel="Clear selection"
-                  clearable
-                  searchable
-                  multiple
-                  required
-                  {...field}
+                <Controller
+                  name="game"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      my={'sm'}
+                      data={gamesData}
+                      searchable
+                      label="Associated Bounti"
+                      placeholder="Adventure, action, etc."
+                      clearButtonLabel="Clear selection"
+                      clearable
+                      multiple
+                      required
+                      {...field}
+                    />
+                  )}
                 />
-              )}
-            />
-            <Text my="xs">{'Instructions *'}</Text>
-            <Controller
-              name="instructions"
-              control={control}
-              render={({ field }) => (
-                <RichTextEditor
-                  {...field}
-                  sticky={true}
-                  stickyOffset={60}
-                  onImageUpload={handleImageUpload}
-                />
-              )}
-            />
 
-            <Checkbox
-              my="lg"
-              label="This bounti requires an NDA to be signed"
-              {...register('requires_nda')}
-            />
-
-            <Button
-              my="lg"
-              sx={{
-                marginRight: 0,
-                marginLeft: 'auto',
-                display: 'flex',
-              }}
-              type="submit"
-              size={'md'}
-              loading={loading}
-            >
-              Create Bounti
-            </Button>
-          </form>
-        </Paper>
+                <Button
+                  my="lg"
+                  sx={{
+                    marginRight: 0,
+                    marginLeft: 'auto',
+                    display: 'flex',
+                  }}
+                  type="submit"
+                  size={'md'}
+                  loading={loading}
+                >
+                  Create Submission
+                </Button>
+              </form>
+            </Paper> */}
+          </Grid.Col>
+        </Grid>
       </Container>
     </>
   );
@@ -403,23 +362,29 @@ export const getServerSideProps = withPageAuth({
         },
       };
     }
-
-    const { data: developer } = await supabaseServerClient(ctx)
-      .from('developer')
-      .select('*, developer_game(game(*))')
-      .eq('user_uuid', user.user.id)
-      .single();
-
     const { data: category } = await supabaseServerClient(ctx).from('category').select('*');
     const { data: platform } = await supabaseServerClient(ctx).from('platform').select('*');
     const { data: feature } = await supabaseServerClient(ctx).from('feature').select('*');
+    const { data: bounti = {} } = await supabaseServerClient(ctx)
+      .from('bounti')
+      .select(
+        '*, bounti_developer(developer(*)), bounti_category(category(*)), bounti_platform(platform(*)), bounti_game(game(*)), bounti_submission(submission(*)))'
+      )
+      .eq('slug', ctx.params.slug)
+      .single();
 
+    const { data: developer = {} } = await supabaseServerClient(ctx)
+      .from('developer')
+      .select('*, bounti_developer(bounti(*))')
+      .eq('uuid', bounti.bounti_developer[0].developer.uuid)
+      .single();
     return {
       props: {
         developer,
         category,
         platform,
         feature,
+        bounti,
       },
     };
   },

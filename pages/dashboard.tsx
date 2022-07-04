@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Heading, Image, styled } from '@modulz/design-system';
 import { Container, Text, Title, Divider, Grid, Paper, Button } from '@mantine/core';
 import { TitleAndMetaTags } from '@components/TitleAndMetaTags';
@@ -7,8 +7,38 @@ import NextLink from 'next/link';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { truncate } from 'lodash';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchProfile, getProfileType, getProfile } from 'store/profile/profileSlice';
+import { AnyAction } from '@reduxjs/toolkit';
+import { useUser } from '@supabase/auth-helpers-react';
 
-export default function Dashboard({ games, bounties }) {
+export default function Dashboard(props) {
+  const { games, bounties } = props;
+  const { user } = props || useUser();
+
+  const dispatch = useDispatch();
+  const profileType = useSelector(getProfileType);
+  const profile = useSelector(getProfile);
+
+  useEffect(() => {
+    dispatch(fetchProfile({ user, profile: profileType }) as unknown as AnyAction);
+  }, [profileType, dispatch]);
+
+  // if (!profile.is_completed) {
+  //   return (
+  //     <Container>
+  //       <TitleAndMetaTags
+  //         title="Bounti"
+  //         description="An open-source React component library for building high-quality, accessible design systems and web apps."
+  //         image="default.png"
+  //       />
+  //       <Title>Welcome to Bounti</Title>
+  //       <Text>Please complete your profile to continue</Text>
+
+  //     </Container>
+  //   );
+  // }
+
   return (
     <main>
       <TitleAndMetaTags title="Dashboard" />
@@ -138,7 +168,7 @@ export const getServerSideProps = withPageAuth({
     const { data } = await supabase
       .from('developer')
       .select('*, developer_game(game(*)), bounti_developer(bounti(*))')
-      .eq('profile_owner', user.user.id)
+      .eq('user_uuid', user.user.id)
       .single();
 
     const games = data.developer_game;
@@ -146,6 +176,7 @@ export const getServerSideProps = withPageAuth({
 
     return {
       props: {
+        user,
         developer: data,
         games,
         bounties,
