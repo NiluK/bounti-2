@@ -11,7 +11,6 @@ const fetchGames = async () => {
 };
 
 export default function Home(props) {
-  console.log(props);
   const [games, setGames] = useState(props.games || []);
 
   useEffect(() => {
@@ -36,7 +35,6 @@ export default function Home(props) {
 
 export async function getServerSideProps(ctx) {
   const { data, error } = await supabaseServerClient(ctx).from('game').select('*');
-  console.log(error);
   let user = null;
   try {
     user = await getUser(ctx);

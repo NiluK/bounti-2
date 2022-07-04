@@ -169,8 +169,6 @@ export function Header(props) {
 
   const user = props.user || useUser().user;
 
-  console.log(user);
-
   const dispatch = useDispatch();
   const profileType = useSelector(getProfileType);
 
@@ -183,8 +181,6 @@ export function Header(props) {
   }, [profileType, dispatch]);
 
   const [userMenuOpened, setUserMenuOpened] = useState(false);
-
-  console.log('profileType', profileType);
 
   const items = links.map((link) => (
     <Link key={link.label} href={link.link}>
