@@ -19,6 +19,7 @@ import {
   Tabs,
 } from '@mantine/core';
 import Link from 'next/link';
+import truncate from 'lodash/truncate';
 
 const useStyles = createStyles((theme) => ({
   description: {
@@ -102,6 +103,9 @@ export default function CaseStudy(props) {
   const genre = game?.game_genre;
   const feature = game?.game_genre;
   const platform = game?.game_genre;
+  const bounti = game?.bounti_game;
+
+  console.log(bounti);
 
   return (
     <>
@@ -175,7 +179,29 @@ export default function CaseStudy(props) {
               </Grid.Col>
             </Grid>
           </Tabs.Tab>
-          <Tabs.Tab label="Bounties"></Tabs.Tab>
+          <Tabs.Tab label="Bounties">
+            <Grid columns={3}>
+              {bounti?.map(({ bounti }) => (
+                <Grid.Col span={1}>
+                  <NextLink href={`/bounties/${bounti.slug}`} key={bounti.id} passHref>
+                    <Paper my="xl" p="md" withBorder shadow={'xs'}>
+                      <Image
+                        src={`${bounti.featured_image}`}
+                        css={{
+                          aspectRatio: '16 / 9',
+                          objectFit: 'cover',
+                        }}
+                      />
+
+                      <Text size="lg" mt="lg">
+                        {truncate(bounti.title, { length: 35 })}
+                      </Text>
+                    </Paper>
+                  </NextLink>
+                </Grid.Col>
+              ))}
+            </Grid>
+          </Tabs.Tab>
         </Tabs>
       </Container>
     </>
@@ -183,13 +209,13 @@ export default function CaseStudy(props) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { data: game = {} } = await supabaseServerClient(ctx)
+  const { data: game = {}, error } = await supabaseServerClient(ctx)
     .from('game')
-    .select('*, developer_game(developer(*)), game_genre(genre(*)), game_platform(platform(*))')
+    .select(
+      '*, developer_game(developer(*)), game_genre(genre(*)), game_platform(platform(*)), bounti_game(bounti(*))'
+    )
     .eq('slug', ctx.params.slug)
     .single();
-
-  console.log(game);
 
   const { data: developer = {} } = await supabaseServerClient(ctx)
     .from('developer')
