@@ -187,7 +187,7 @@ export default function CaseStudy(props) {
                     <Paper my="xl" p="md" withBorder shadow={'xs'}>
                       <Image
                         src={`${bounti.featured_image}`}
-                        css={{
+                        sx={{
                           aspectRatio: '16 / 9',
                           objectFit: 'cover',
                         }}

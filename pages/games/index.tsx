@@ -10,8 +10,6 @@ import {
   supabaseClient,
 } from '@supabase/auth-helpers-nextjs';
 import NextLink from 'next/link';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { truncate } from 'lodash';
 
 export default function Dashboard({ games }) {
