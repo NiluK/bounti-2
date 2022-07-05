@@ -124,6 +124,21 @@ export default function Bounti(props) {
           <Grid.Col xs={3} sm={2}>
             <HorizontalCard game={game} />
             <Title order={3} my="md">
+              Game Link
+            </Title>
+            <Paper p="xl">
+              <Link href={bounti.file} passHref>
+                <Text
+                  color="orange"
+                  sx={{
+                    cursor: 'pointer',
+                  }}
+                >
+                  {bounti.file}
+                </Text>
+              </Link>
+            </Paper>
+            <Title order={3} my="md">
               Summary
             </Title>
             <Paper p="sm">
@@ -177,7 +192,7 @@ export default function Bounti(props) {
             <Title order={3} my="md">
               Instructions
             </Title>
-            <Paper shadow="xs" radius="md" p="sm" withBorder>
+            <Paper shadow="xs" radius="md" p="lg" withBorder>
               <TypographyStylesProvider>
                 <div
                   dangerouslySetInnerHTML={{ __html: bounti?.instructions }}
@@ -185,9 +200,9 @@ export default function Bounti(props) {
                 />
               </TypographyStylesProvider>
             </Paper>
-            <Title order={3} my="md">
+            {/* <Title order={3} my="md">
               Entries {bounti.submissions_count}
-            </Title>
+            </Title> */}
           </Grid.Col>
           <Grid.Col
             sx={{
@@ -200,7 +215,7 @@ export default function Bounti(props) {
           >
             <Paper shadow="xs" radius="md" p="sm" withBorder>
               <Title align="center" order={3}>
-                Reward Pool
+                Reward
               </Title>
 
               <Title my="xl" align="center" order={1}>
@@ -209,13 +224,13 @@ export default function Bounti(props) {
                 </Text>
               </Title>
 
-              <Title align="center" order={4}>
+              {/* <Title align="center" order={4}>
                 Submissions
               </Title>
 
               <Title my="sm" align="center" order={3}>
-                25 / {bounti.max_submissions}
-              </Title>
+                {bounti.submission_count} / {bounti.max_submissions}
+              </Title> */}
               <Link href={`/bounties/${slug}/submissions/new`}>
                 <Button
                   fullWidth

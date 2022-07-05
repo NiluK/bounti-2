@@ -85,6 +85,7 @@ export default function GameNew(props) {
           description: data.description,
           slug: camelCase(data.name),
           website: data.website,
+          summary: data.summary,
         })
         .single();
 

@@ -12,21 +12,21 @@ import {
 import NextLink from 'next/link';
 import { truncate } from 'lodash';
 
-export default function Dashboard({ games }) {
+export default function Bounties({ bounties }) {
   return (
     <main>
-      <TitleAndMetaTags title="Dashboard" />
+      <TitleAndMetaTags title="All Bounties" />
       <Container size={'lg'} my="lg">
         <Title order={2}>All Bounties</Title>
         <Divider my="lg" />
         <Grid columns={3}>
-          {games?.map((game) => {
+          {bounties?.map((bounti) => {
             return (
               <Grid.Col span={1}>
-                <NextLink href={`/bounties/${game.slug}`} key={game.id} passHref>
+                <NextLink href={`/bounties/${bounti.slug}`} key={bounti.id} passHref>
                   <Paper p={10} withBorder shadow={'xs'}>
                     <Image
-                      src={`${game.featured_image}`}
+                      src={`${bounti.featured_image}`}
                       css={{
                         aspectRatio: '16 / 9',
                         objectFit: 'cover',
@@ -34,7 +34,7 @@ export default function Dashboard({ games }) {
                     />
 
                     <Text size="lg" mt="lg">
-                      {truncate(game.name, { length: 35 })}
+                      {truncate(bounti.title, { length: 35 })}
                     </Text>
                   </Paper>
                 </NextLink>
@@ -71,10 +71,9 @@ export const getServerSideProps = withPageAuth({
 
     const { data } = await supabase.from('bounti').select('*');
 
-    const games = data;
     return {
       props: {
-        games,
+        bounties: data,
       },
     };
   },

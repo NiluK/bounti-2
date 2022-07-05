@@ -108,157 +108,165 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function BountiNew(props) {
-  const [category, setCategory] = useState(props.category);
-  const [platform, setPlatform] = useState(props.platform);
-  const [feature, setFeature] = useState(props.feature);
-  const [developer, setDeveloper] = useState(props.developer);
+  // const [category, setCategory] = useState(props.category);
+  // const [platform, setPlatform] = useState(props.platform);
+  // const [feature, setFeature] = useState(props.feature);
+  // const [developer, setDeveloper] = useState(props.developer);
   const [bounti, setBounti] = useState(props.bounti);
-  const [loading, setLoading] = useState(false);
-  const user = useUser();
-  const router = useRouter();
+  // const [loading, setLoading] = useState(false);
+  // const user = useUser();
+  // const router = useRouter();
   const { classes } = useStyles();
 
-  const { register, handleSubmit, control } = useForm();
+  // const { register, handleSubmit, control } = useForm();
 
-  const onSubmit = async (data) => {
-    try {
-      setLoading(true);
+  // // const onSubmit = async (data) => {
+  // //   try {
+  // //     setLoading(true);
 
-      const { data: bounti } = await supabaseClient
-        .from('bounti')
-        .insert({
-          title: data.title,
-          subtitle: data.subtitle,
-          slug: camelCase(data.title),
-          instructions: data.instructions,
-          non_monetary_rewards: data.non_monetary_rewards,
-          reward_distribution: data.reward_distribution,
-          reward_deadline: data.reward_deadline,
-          reward_number: data.reward_number,
-          reward_value: data.reward_value,
-          file: data.file,
-          build: data.build,
-        })
-        .single();
+  // //     const { data: bounti } = await supabaseClient
+  // //       .from('bounti')
+  // //       .insert({
+  // //         title: data.title,
+  // //         subtitle: data.subtitle,
+  // //         slug: camelCase(data.title),
+  // //         instructions: data.instructions,
+  // //         non_monetary_rewards: data.non_monetary_rewards,
+  // //         reward_distribution: data.reward_distribution,
+  // //         reward_deadline: data.reward_deadline,
+  // //         reward_number: data.reward_number,
+  // //         reward_value: data.reward_value,
+  // //         file: data.file,
+  // //         build: data.build,
+  // //       })
+  // //       .single();
 
-      console.log('bounti', bounti);
+  // //     console.log('bounti', bounti);
 
-      const featuredImage = await supabaseClient.storage
-        .from('bounti')
-        .upload(`${bounti.uuid}/featured-image/${data.featuredImage.path}`, data.featuredImage, {
-          upsert: true,
-        });
+  // //     const featuredImage = await supabaseClient.storage
+  // //       .from('bounti')
+  // //       .upload(`${bounti.uuid}/featured-image/${data.featuredImage.path}`, data.featuredImage, {
+  // //         upsert: true,
+  // //       });
 
-      const { data: bounti_category } = await supabaseClient
-        .from('bounti_categoty')
-        .insert({
-          category_uuid: data.category,
-          bounti_uuid: bounti.uuid,
-        })
-        .single();
+  // //     const { data: bounti_category } = await supabaseClient
+  // //       .from('bounti_categoty')
+  // //       .insert({
+  // //         category_uuid: data.category,
+  // //         bounti_uuid: bounti.uuid,
+  // //       })
+  // //       .single();
 
-      const { data: game } = await supabaseClient
-        .from('bounti_game')
-        .insert({
-          game_uuid: data.game,
-          bounti_uuid: bounti.uuid,
-        })
-        .single();
+  // //     const { data: game } = await supabaseClient
+  // //       .from('bounti_game')
+  // //       .insert({
+  // //         game_uuid: data.game,
+  // //         bounti_uuid: bounti.uuid,
+  // //       })
+  // //       .single();
 
-      for (const platform in data.platform) {
-        const { data: game_platform } = await supabaseClient
-          .from('bounti_platform')
-          .insert({
-            platform_uuid: data.platform[platform],
-            bounti_uuid: bounti.uuid,
-          })
-          .single();
-      }
+  // //     for (const platform in data.platform) {
+  // //       const { data: game_platform } = await supabaseClient
+  // //         .from('bounti_platform')
+  // //         .insert({
+  // //           platform_uuid: data.platform[platform],
+  // //           bounti_uuid: bounti.uuid,
+  // //         })
+  // //         .single();
+  // //     }
 
-      const { data: updatedDeveloper } = await supabaseClient
-        .from('bounti_developer')
-        .insert({
-          developer_uuid: developer.uuid,
-          bounti_uuid: bounti.uuid,
-        })
-        .match({ uuid: developer })
-        .single();
+  // //     const { data: updatedDeveloper } = await supabaseClient
+  // //       .from('bounti_developer')
+  // //       .insert({
+  // //         developer_uuid: developer.uuid,
+  // //         bounti_uuid: bounti.uuid,
+  // //       })
+  // //       .match({ uuid: developer })
+  // //       .single();
 
-      const { data: updatedBounti } = await supabaseClient
-        .from('game')
-        .update({
-          featured_image: `https://ujsgjkwpigmmnmyfdgnb.supabase.co/storage/v1/object/public/${featuredImage.data.Key}`,
-        })
-        .match({ uuid: bounti.uuid })
-        .single();
+  // //     const { data: updatedBounti } = await supabaseClient
+  // //       .from('game')
+  // //       .update({
+  // //         featured_image: `https://ujsgjkwpigmmnmyfdgnb.supabase.co/storage/v1/object/public/${featuredImage.data.Key}`,
+  // //       })
+  // //       .match({ uuid: bounti.uuid })
+  // //       .single();
 
-      setLoading(false);
+  // //     setLoading(false);
 
-      router.push(`/bounties/${updatedBounti.slug}`);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
-    }
+  // //     router.push(`/bounties/${updatedBounti.slug}`);
+  // //   } catch (error) {
+  // //     console.log(error);
+  // //     setLoading(false);
+  // //   }
+  // // };
+
+  // const games = developer?.developer_game;
+
+  // console.log('games', games);
+
+  // useEffect(() => {
+  //   if (!category.length) {
+  //     const category = getData('category');
+  //     category(category);
+  //   }
+  //   if (!platform.length) {
+  //     const platform = getData('platform');
+  //     setPlatform(platform);
+  //   }
+  //   if (!feature.length) {
+  //     const feature = getData('feature');
+  //     setFeature(feature);
+  //   }
+  //   if (!developer) {
+  //     const developer = getDeveloper(user);
+  //     setDeveloper(developer);
+  //   }
+  // }, [category, platform, feature, developer]);
+
+  // const categoryData = Array.isArray(category)
+  //   ? category.map((category) => {
+  //       return {
+  //         label: category.name,
+  //         value: category.uuid,
+  //       };
+  //     })
+  //   : [];
+  // const [categorySetData, setCategorySetData] = useState(categoryData);
+
+  // const platformData = Array.isArray(platform)
+  //   ? platform.map((platform) => {
+  //       return {
+  //         label: platform.name,
+  //         value: platform.uuid,
+  //       };
+  //     })
+  //   : [];
+
+  // const gamesData = Array.isArray(games)
+  //   ? games.map(({ game }) => {
+  //       return {
+  //         label: game.name,
+  //         value: game.uuid,
+  //       };
+  //     })
+  //   : [];
+  // const featureData = Array.isArray(feature)
+  //   ? feature.map((feature) => {
+  //       return {
+  //         label: feature.name,
+  //         value: feature.uuid,
+  //       };
+  //     })
+  //   : [];
+
+  const router = useRouter();
+
+  const slug = router.query.slug;
+
+  const map = {
+    funEralSimulatorBounti: 'MJF1m4N4',
   };
-
-  const games = developer?.developer_game;
-
-  console.log('games', games);
-
-  useEffect(() => {
-    if (!category.length) {
-      const category = getData('category');
-      category(category);
-    }
-    if (!platform.length) {
-      const platform = getData('platform');
-      setPlatform(platform);
-    }
-    if (!feature.length) {
-      const feature = getData('feature');
-      setFeature(feature);
-    }
-    if (!developer) {
-      const developer = getDeveloper(user);
-      setDeveloper(developer);
-    }
-  }, [category, platform, feature, developer]);
-
-  const categoryData = Array.isArray(category)
-    ? category.map((category) => {
-        return {
-          label: category.name,
-          value: category.uuid,
-        };
-      })
-    : [];
-  const [categorySetData, setCategorySetData] = useState(categoryData);
-
-  const platformData = Array.isArray(platform)
-    ? platform.map((platform) => {
-        return {
-          label: platform.name,
-          value: platform.uuid,
-        };
-      })
-    : [];
-
-  const gamesData = Array.isArray(games)
-    ? games.map(({ game }) => {
-        return {
-          label: game.name,
-          value: game.uuid,
-        };
-      })
-    : [];
-  const featureData = Array.isArray(feature)
-    ? feature.map((feature) => {
-        return {
-          label: feature.name,
-          value: feature.uuid,
-        };
-      })
-    : [];
 
   return (
     <>
@@ -266,10 +274,10 @@ export default function BountiNew(props) {
       <Container my={20} size={'xl'}>
         <Grid columns={2}>
           <Grid.Col span={1}>
-            <Title order={3} my="md">
+            <Title order={3} mb="md">
               Instructions
             </Title>
-            <Paper shadow="xs" radius="md" p="sm" withBorder>
+            <Paper shadow="xs" radius="md" p="xl" withBorder>
               <TypographyStylesProvider>
                 <div
                   dangerouslySetInnerHTML={{ __html: bounti?.instructions }}
@@ -279,7 +287,16 @@ export default function BountiNew(props) {
             </Paper>
           </Grid.Col>
           <Grid.Col span={1}>
-            <Widget id="KWFZ7r4x" height={800} />
+            <Title order={3} mb="md">
+              Submission Form
+            </Title>
+            <Paper shadow="xs" radius="md" p="xl" withBorder>
+              {map[slug] ? (
+                <Widget id={map[slug]} height={600} />
+              ) : (
+                <>Submissions are currently disabled for this bounti</>
+              )}
+            </Paper>
             {/* <Paper p={20} withBorder shadow={'xs'} my="xl">
               <Title order={2}>Create New Submission</Title>
               <form onSubmit={handleSubmit(onSubmit)}>

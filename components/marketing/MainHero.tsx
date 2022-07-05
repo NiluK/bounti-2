@@ -126,6 +126,8 @@ export const MainHero = ({ games = [] }) => {
   const lastUsedFocusArea = React.useRef<HTMLElement>(null);
   const isRoving = React.useRef(false);
 
+  console.log('games', games);
+
   const { classes, cx } = useStyles();
 
   React.useEffect(() => {
@@ -277,7 +279,7 @@ export const MainHero = ({ games = [] }) => {
             onKeyDown={onFocusAreaKeyDown}
             onFocus={onFocusAreaFocus}
           >
-            <NextLink href="/games/marble-mansion" passHref>
+            <NextLink href={`/games/${slug}`} passHref>
               <Image
                 css={{
                   objectFit: 'cover',
