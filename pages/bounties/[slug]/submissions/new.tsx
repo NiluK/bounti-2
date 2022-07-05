@@ -275,6 +275,21 @@ export default function BountiNew(props) {
         <Grid columns={2}>
           <Grid.Col span={1}>
             <Title order={3} mb="md">
+              Game Link
+            </Title>
+            <Paper p="xl">
+              <Link href={bounti.file} passHref>
+                <Text
+                  color="orange"
+                  sx={{
+                    cursor: 'pointer',
+                  }}
+                >
+                  {bounti.file}
+                </Text>
+              </Link>
+            </Paper>
+            <Title order={3} my="md">
               Instructions
             </Title>
             <Paper shadow="xs" radius="md" p="xl" withBorder>
@@ -286,6 +301,7 @@ export default function BountiNew(props) {
               </TypographyStylesProvider>
             </Paper>
           </Grid.Col>
+
           <Grid.Col span={1}>
             <Title order={3} mb="md">
               Submission Form

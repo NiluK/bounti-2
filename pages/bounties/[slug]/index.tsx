@@ -124,21 +124,6 @@ export default function Bounti(props) {
           <Grid.Col xs={3} sm={2}>
             <HorizontalCard game={game} />
             <Title order={3} my="md">
-              Game Link
-            </Title>
-            <Paper p="xl">
-              <Link href={bounti.file} passHref>
-                <Text
-                  color="orange"
-                  sx={{
-                    cursor: 'pointer',
-                  }}
-                >
-                  {bounti.file}
-                </Text>
-              </Link>
-            </Paper>
-            <Title order={3} my="md">
               Summary
             </Title>
             <Paper p="sm">
@@ -188,6 +173,21 @@ export default function Bounti(props) {
               </Title>
 
               <Text>{bounti.reward_distribution}</Text>
+            </Paper>
+            <Title order={3} my="md">
+              Game Link
+            </Title>
+            <Paper p="xl">
+              <Link href={bounti.file} passHref>
+                <Text
+                  color="orange"
+                  sx={{
+                    cursor: 'pointer',
+                  }}
+                >
+                  {bounti.file}
+                </Text>
+              </Link>
             </Paper>
             <Title order={3} my="md">
               Instructions
