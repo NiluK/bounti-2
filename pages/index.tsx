@@ -16,7 +16,9 @@ export default function Home(props) {
   useEffect(() => {
     if (!games.length) {
       const fetchedGame = fetchGames();
-      setGames(fetchedGame);
+      if (Array.isArray(fetchedGame)) {
+        setGames(fetchedGame);
+      }
     }
   }, [games]);
 
