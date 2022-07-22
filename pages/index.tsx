@@ -48,6 +48,7 @@ export async function getServerSideProps(ctx) {
       },
     };
   } catch (error) {
+    console.log(error);
     if (error.message?.includes('JWT expired')) {
       await supabaseServerClient(ctx).auth.refreshSession();
     } else {
