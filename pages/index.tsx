@@ -38,18 +38,18 @@ export async function getServerSideProps(ctx) {
     const { data, error } = await supabaseServerClient(ctx).from('game').select('*');
     let user = null;
     user = await getUser(ctx);
+
+    return {
+      props: {
+        games: data,
+        user: user.user,
+      },
+    };
   } catch (error) {
     if (error.message?.includes('JWT expired')) {
-      await supabase.auth.refreshSession();
+      await supabaseServerClient(ctx).auth.refreshSession();
     } else {
       throw new Error(error.message);
     }
   }
-
-  return {
-    props: {
-      games: data,
-      user: user.user,
-    },
-  };
 }
