@@ -49,7 +49,12 @@ export async function getServerSideProps(ctx) {
     if (error.message?.includes('JWT expired')) {
       await supabaseServerClient(ctx).auth.refreshSession();
     } else {
-      throw new Error(error.message);
+      return {
+        props: {
+          games: [],
+          user: null,
+        },
+      };
     }
   }
 }
