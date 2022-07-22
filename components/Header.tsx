@@ -153,14 +153,14 @@ const useStyles = createStyles((theme) => ({
 }));
 
 const links = [
-  { link: '/dashboard', label: 'Dashboard' },
-  { link: '/games', label: 'Games' },
-  { link: '/bounties', label: 'Bounties' },
+  // { link: '/dashboard', label: 'Dashboard' },
+  // { link: '/games', label: 'Games' },
+  // { link: '/bounties', label: 'Bounties' },
 ];
 
 const loggedOutlinks = [
-  { link: '/signup', label: 'Sign Up' },
-  { link: '/login', label: 'Login' },
+  // { link: '/signup', label: 'Sign Up' },
+  // { link: '/login', label: 'Login' },
 ];
 
 export function Header(props) {

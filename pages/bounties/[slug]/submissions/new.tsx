@@ -266,6 +266,7 @@ export default function BountiNew(props) {
 
   const map = {
     funEralSimulatorBounti: 'MJF1m4N4',
+    f1abTestBounti: 'X66Co7fc',
   };
 
   return (
@@ -278,7 +279,7 @@ export default function BountiNew(props) {
               Game Link
             </Title>
             <Paper p="xl">
-              <Link href={bounti.file} passHref>
+              <a href={bounti.file} target="_blank">
                 <Text
                   color="orange"
                   sx={{
@@ -287,7 +288,7 @@ export default function BountiNew(props) {
                 >
                   {bounti.file}
                 </Text>
-              </Link>
+              </a>
             </Paper>
             <Title order={3} my="md">
               Instructions
@@ -375,50 +376,47 @@ export default function BountiNew(props) {
   );
 }
 
-export const getServerSideProps = withPageAuth({
-  redirectTo: '/login',
-  async getServerSideProps(ctx) {
-    let user;
-    try {
-      user = await getUser(ctx);
-    } catch (e) {
-      console.error(e);
-      user = null;
-    }
+export const getServerSideProps = async (ctx) => {
+  // let user;
+  // try {
+  //   user = await getUser(ctx);
+  // } catch (e) {
+  //   console.error(e);
+  //   user = null;
+  // }
 
-    if (!user.user) {
-      return {
-        props: {
-          redirect: {
-            pathname: '/login',
-          },
-        },
-      };
-    }
-    const { data: category } = await supabaseServerClient(ctx).from('category').select('*');
-    const { data: platform } = await supabaseServerClient(ctx).from('platform').select('*');
-    const { data: feature } = await supabaseServerClient(ctx).from('feature').select('*');
-    const { data: bounti = {} } = await supabaseServerClient(ctx)
-      .from('bounti')
-      .select(
-        '*, bounti_developer(developer(*)), bounti_category(category(*)), bounti_platform(platform(*)), bounti_game(game(*)), bounti_submission(submission(*)))'
-      )
-      .eq('slug', ctx.params.slug)
-      .single();
+  // if (!user.user) {
+  //   return {
+  //     props: {
+  //       redirect: {
+  //         pathname: '/login',
+  //       },
+  //     },
+  //   };
+  // }
+  const { data: category } = await supabaseServerClient(ctx).from('category').select('*');
+  const { data: platform } = await supabaseServerClient(ctx).from('platform').select('*');
+  const { data: feature } = await supabaseServerClient(ctx).from('feature').select('*');
+  const { data: bounti = {} } = await supabaseServerClient(ctx)
+    .from('bounti')
+    .select(
+      '*, bounti_developer(developer(*)), bounti_category(category(*)), bounti_platform(platform(*)), bounti_game(game(*)), bounti_submission(submission(*)))'
+    )
+    .eq('slug', ctx.params.slug)
+    .single();
 
-    const { data: developer = {} } = await supabaseServerClient(ctx)
-      .from('developer')
-      .select('*, bounti_developer(bounti(*))')
-      .eq('uuid', bounti.bounti_developer[0].developer.uuid)
-      .single();
-    return {
-      props: {
-        developer,
-        category,
-        platform,
-        feature,
-        bounti,
-      },
-    };
-  },
-});
+  const { data: developer = {} } = await supabaseServerClient(ctx)
+    .from('developer')
+    .select('*, bounti_developer(bounti(*))')
+    .eq('uuid', bounti.bounti_developer[0].developer.uuid)
+    .single();
+  return {
+    props: {
+      developer,
+      category,
+      platform,
+      feature,
+      bounti,
+    },
+  };
+};

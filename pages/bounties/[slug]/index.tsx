@@ -173,12 +173,18 @@ export default function Bounti(props) {
               </Title>
 
               <Text>{bounti.reward_distribution}</Text>
+
+              <Title order={5} my="sm">
+                Non monetary rewards
+              </Title>
+
+              <Text>{bounti.non_monetary_rewards}</Text>
             </Paper>
             <Title order={3} my="md">
               Game Link
             </Title>
             <Paper p="xl">
-              <Link href={bounti.file} passHref>
+              <a href={bounti.file} target="_blank">
                 <Text
                   color="orange"
                   sx={{
@@ -187,7 +193,7 @@ export default function Bounti(props) {
                 >
                   {bounti.file}
                 </Text>
-              </Link>
+              </a>
             </Paper>
             <Title order={3} my="md">
               Instructions
@@ -239,7 +245,7 @@ export default function Bounti(props) {
                   size={'md'}
                   // loading={loading}
                 >
-                  Submit
+                  Begin Bounti
                 </Button>
               </Link>
             </Paper>
