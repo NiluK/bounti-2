@@ -34,12 +34,16 @@ export default function Home(props) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { data, error } = await supabaseServerClient(ctx).from('game').select('*');
-  let user = null;
   try {
+    const { data, error } = await supabaseServerClient(ctx).from('game').select('*');
+    let user = null;
     user = await getUser(ctx);
   } catch (error) {
-    console.log(error);
+    if (error.message?.includes('JWT expired')) {
+      await supabase.auth.refreshSession();
+    } else {
+      throw new Error(error.message);
+    }
   }
 
   return {
