@@ -267,6 +267,8 @@ export default function BountiNew(props) {
   const map = {
     funEralSimulatorBounti: 'MJF1m4N4',
     f1abTestBounti: 'X66Co7fc',
+    starlightEscapeBounti: 'BqXNwKMN',
+    playtestWrathOfTheStormcallerVersion03: 'Z3FIEQEt',
   };
 
   return (

@@ -256,6 +256,7 @@ export default function GameCarousel({ game, setHeroImage }) {
                     width: '300px',
                     objectPosition: 'top center',
                     height: '100%',
+                    maxHeight: '200px',
                     aspectRatio: '16 / 9',
                     p: 'sm',
                     borderRadius: '5px',
